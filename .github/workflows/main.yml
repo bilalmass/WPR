@@ -15,7 +15,6 @@ jobs:
 
       - name: CodeQL Analysis
         uses: github/codeql-action@v2
-        with:
          
 
       - name: Dependabot Security Updates

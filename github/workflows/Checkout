@@ -4,21 +4,27 @@ on:
   push:
     branches:
       - main
+
 jobs:
   security_scan:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      # Voeg hier stappen toe voor beveiligingsanalyses, zoals code-analyse, dependency scanning, etc.
-- name: CodeQL Analysis
-  uses: github/codeql-action@v2
-- name: Dependabot Security Updates
-  uses: dependabot/dependabot-core@v0.161.0
-  with:
-    github-token: ${{ secrets.GITHUB_TOKEN }}
-    directory: "/"
-- name: Report Security Findings
-  run: |
-    # Voeg hier commando's toe om beveiligingsrapporten te genereren en te rapporteren.
+      - name: CodeQL Analysis
+        uses: github/codeql-action@v2
+        with:
+         
+
+      - name: Dependabot Security Updates
+        uses: dependabot/dependabot-core@v0.161.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          directory: "/"
+
+
+      - name: Report Security Findings
+        run: |
+

@@ -1,0 +1,52 @@
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  deploy_staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-18.04
+
+    steps:
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '10.x'
+
+      - name: Install Dependencies
+        run: npm install
+
+  test:
+    name: Test on Node.js
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node_version: ['8', '10', '12']
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v1
+
+      - name: Use Node.js ${{ matrix.node_version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node_version }}
+
+      - name: Install Dependencies, Build, and Test
+        run: |
+          npm install
+          npm run build --if-present
+          npm test
+
+  publish:
+    name: Publish Package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v1
+
+      - name: Publish to npm
+        run: npm publish
+        if: github.event_name == 'pull'

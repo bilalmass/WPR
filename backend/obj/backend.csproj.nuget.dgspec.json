@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\HP\\OneDrive\\Bureaublad\\WPR\\backend\\backend.csproj": {}
+    "C:\\Users\\HP\\OneDrive\\Bureaublad\\WPR\\backend\\backend.csproj": {}
   },
   "projects": {
-    "c:\\Users\\HP\\OneDrive\\Bureaublad\\WPR\\backend\\backend.csproj": {
+    "C:\\Users\\HP\\OneDrive\\Bureaublad\\WPR\\backend\\backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\HP\\OneDrive\\Bureaublad\\WPR\\backend\\backend.csproj",
+        "projectUniqueName": "C:\\Users\\HP\\OneDrive\\Bureaublad\\WPR\\backend\\backend.csproj",
         "projectName": "backend",
-        "projectPath": "c:\\Users\\HP\\OneDrive\\Bureaublad\\WPR\\backend\\backend.csproj",
+        "projectPath": "C:\\Users\\HP\\OneDrive\\Bureaublad\\WPR\\backend\\backend.csproj",
         "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\HP\\OneDrive\\Bureaublad\\WPR\\backend\\obj\\",
+        "outputPath": "C:\\Users\\HP\\OneDrive\\Bureaublad\\WPR\\backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\HP\\AppData\\Roaming\\NuGet\\NuGet.Config"

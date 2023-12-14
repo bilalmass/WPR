@@ -4,22 +4,38 @@ nav {
     padding: 10px;
 }
 
-ul {
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-logo {
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.navbar-logo img {
+    max-width: 50px; /* Aangepaste maximale breedte voor de afbeelding */
+    margin-right: 10px; /* Ruimte toegevoegd tussen logo en links */
+}
+
+.navbar-links {
     list-style-type: none;
     margin: 0;
     padding: 0;
     display: flex;
-    justify-content: space-around;
 }
 
-li {
-    display: inline;
+.navbar-link {
     margin-right: 20px;
     color: white;
-    font-weight: bold;
-    cursor: pointer;
+    text-decoration: none;
+    font-size: 18px;
 }
 
-li:hover {
+.navbar-link:hover {
     text-decoration: underline;
 }

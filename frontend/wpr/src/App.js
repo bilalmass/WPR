@@ -1,29 +1,33 @@
-import logo from './logo.svg';
+// App.jsx
+import React from 'react';
+import logo from './components/media/Logo Icon/icon_accessibility.png';
 import './App.css';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import './components/componentstyling/mainpage.css';  // Aangepaste import-paden
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <div class="g-signin2" data-onsuccess="onSignIn"></div>
-        <script src="https://apis.google.com/js/platform.js" async defer></script>
-        <meta name="google-signin-client_id" content="71573168516-v2de5vpafufuinrjn6g9krsoo5v065d0.apps.googleusercontent.com"></meta>
-      </header>
-    </div>
-    
-  );
+
+    return (
+        <div className="App">
+            <Navbar />
+            <div className="main-page">
+                <header className="App-header">
+                    <img src={logo} className="App-logo" alt="logo" />
+                    <div className="main-title">
+                        Welkom bij Stichting Accessibility
+                    </div>
+                    <div className="sub-title">
+                        Een inclusieve samenleving waarin iedereen gelijkwaardig participeert.
+                    </div>
+                    <a className="btn" href="#lees-meer">
+                        Lees meer
+                    </a>
+                </header>
+            </div>
+            <Footer />
+        </div>
+    );
 }
 
 export default App;

@@ -1,0 +1,25 @@
+﻿/* Navbar.css */
+nav {
+    background-color: #333;
+    padding: 10px;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-around;
+}
+
+li {
+    display: inline;
+    margin-right: 20px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+li:hover {
+    text-decoration: underline;
+}

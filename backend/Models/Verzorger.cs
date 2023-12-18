@@ -2,5 +2,6 @@ namespace Models;
 
 public class Verzorger : Gebruiker
 {
-    public Ervaringsdeskundige Ervaringsdeskundige {get; set;}
+    public int VerzorgerId {get; set;}
+    public ICollection<Ervaringsdeskundige> Ervaringsdeskundige {get; set;}
 }

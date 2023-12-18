@@ -4,5 +4,5 @@ namespace Models;
 
 public class Rol : IdentityRole
 {
-    public ICollection<GebruikerRol> GebruikerRollen {get; set;}
+    public  ICollection<GebruikerRol> GebruikerRollen {get; set;}
 }

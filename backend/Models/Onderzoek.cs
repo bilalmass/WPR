@@ -11,6 +11,7 @@ public class Onderzoek
     public string Categorie {get; set;}
     public string Status {get; set;}
     public string Type {get; set;}
+    public Bedrijf Bedrijf {get; set;}
 
-    public List<Ervaringsdeskundige> Deelname {get; set;}
+    public ICollection<ErvaringsdeskundigeOnderzoek> Deelnemers {get; set;}
 }

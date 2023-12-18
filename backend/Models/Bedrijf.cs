@@ -2,5 +2,6 @@ namespace Models;
 
 public class Bedrijf : Gebruiker
 {
-    public List<Onderzoek>? Onderzoeken {get; set;}
+    public int BedrijfId {get; set;}
+    public ICollection<Onderzoek>? Onderzoeken {get; set;}
 }

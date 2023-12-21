@@ -1,32 +1,22 @@
 // App.jsx
-import React from 'react';
-import logo from './components/media/Logo Icon/icon_accessibility.png';
-import './App.css';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-import './components/componentstyling/mainpage.css';  // Aangepaste import-paden
+import {BrowserRouter,Routes,Route} from 'react-router-dom';
+import Home from './pages/Home'
+import Casussen from './pages/Casussen'
+import Login from './pages/Login'
+import Register from './pages/Register'
 
-function App() {
+export default function App() {
     return (
-        <div className="App">
-            <Navbar />
-            <div className="main-page">
-                <header className="App-header">
-                    <img src={logo} className="App-logo" alt="logo" />
-                    <div className="main-title">
-                        Welkom bij Stichting Accessibility
-                    </div>
-                    <div className="sub-title">
-                        Een inclusieve samenleving waarin iedereen gelijkwaardig participeert.
-                    </div>
-                    <a className="btn" href="#lees-meer">
-                        Lees meer
-                    </a>
-                </header>
-            </div>
-            <Footer />
+        <div>
+            <BrowserRouter>
+                <Routes>
+                    <Route index element={<Home/>} />
+                    <Route path="/home" element={<Home/>} />
+                    <Route path="/casussen" element={<Casussen/>} />
+                    <Route path="/login" element={<Login/>} />
+                    <Route path="/register" element={<Register/>} />
+                </Routes>
+            </BrowserRouter>
         </div>
     );
 }
-
-export default App;

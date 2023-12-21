@@ -1,0 +1,87 @@
+﻿.casussen-container {
+    margin-top: 5%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    padding: 20px;
+    justify-content: center;
+    margin-bottom: 5%;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+.casus-card {
+    background-color: #111329;
+    flex: 0 0 calc(25% - 20px);
+    border: 3px solid #ccc;
+    padding: 10px;
+    box-sizing: border-box;
+    text-align: center;
+    border-radius: 20px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.casus-card p {
+    margin-bottom: auto;
+    color: #D9EBF7  ;
+}
+
+.casus-card h1 {
+    color: #21CEA1;
+    text-align: start;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.casus-card h2 {
+    color: white;
+    margin-bottom: 10px;
+}
+
+button {
+    background-color: #4caf50;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+@media only screen and (max-width: 768px) {
+    .casus-card {
+        flex: 0 0 calc(100% - 20px);
+    }
+}
+
+.venster {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.venster-inhoud {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    position: relative;
+}
+
+.sluit {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #555;
+}

@@ -7,6 +7,7 @@ import Footer from './components/Footer';
 import './components/componentstyling/mainpage.css';  // Aangepaste import-paden
 
 function App() {
+
     return (
         <div className="App">
             <Navbar />

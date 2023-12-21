@@ -26,9 +26,32 @@ const Register = () => {
             setPasswordError('Wachtwoord voldoet niet aan de beveiligingseisen.');
             return;
         }
-
+        RegistreerErvaringsdeskundige();
         console.log('Registratiegegevens:', formData);
     };
+
+    function RegistreerErvaringsdeskundige()
+    {
+        fetch("https://localhost:7211/Registreer/ervaringsdeskundige", {
+            method: "POST",
+            mode: "cors",
+            headers: {
+                'Acces-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "voornaam": firstName,
+                "achternaam": lastName,
+                "email": email,
+                "telefoonnummer": phoneNumber,
+                "wachtwoord": password,
+                "geslacht": gender,
+                "geboortedatum": birthDate
+            })
+        })
+        .then(response => response.json())
+        .then(data => console.log(data));
+    }
 
     return (
         <div className="registration-container">

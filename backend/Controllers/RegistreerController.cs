@@ -34,7 +34,7 @@ public class AccountController : ControllerBase
     }
 
     [HttpPost]
-    [Route("registreer")]
+    [Route("ervaringsdeskundige")]
     public async Task<IActionResult> RegistreerErvaringsDeskundige([FromBody] RegistreerRequestData data)
     {
         var user = new Ervaringsdeskundige {Voornaam = data.Voornaam, Achternaam = data.Achternaam, Email = data.Email, Telefoonnummer = data.Telefoonnummer, Geboortedatum = data.Geboortedatum, Geslacht = data.Geslacht};

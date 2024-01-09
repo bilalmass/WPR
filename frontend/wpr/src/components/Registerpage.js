@@ -41,13 +41,13 @@ const Register = () => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                "voornaam": firstName,
-                "achternaam": lastName,
-                "email": email,
-                "telefoonnummer": phoneNumber,
-                "wachtwoord": password,
-                "geslacht": gender,
-                "geboortedatum": birthDate
+                "firstName": formData.firstName,
+                "lastName": formData.lastName,
+                "email": formData.email,
+                "phoneNumber": formData.phoneNumber,
+                "password": formData.password,
+                "gender": formData.gender,
+                "birthDate": formData.birthDate
             })
         })
         .then(response => response.json())

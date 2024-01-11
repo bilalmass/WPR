@@ -1,5 +1,6 @@
 ﻿import React, { useState } from 'react';
 import './componentstyling/casuspage.css';
+import dummydata from './dummydata/onderzoekendummy'
 
 const Casussen = () => {
     const [selectedCasus, setSelectedCasus] = useState(null);
@@ -12,27 +13,15 @@ const Casussen = () => {
         setSelectedCasus(null);
     };
 
-    // Dummy data omdat er nog geen database is
-    const casussenData = [
-        { id: 1, type: 'Interview', title: 'Casus 1', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
-        { id: 2, type: 'Groepsgesprek', title: 'Casus 2', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
-        { id: 3, type: 'Online Onderzoek', title: 'Casus 3', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
-        { id: 4, type: 'Engelstalig Onderzoek', title: 'Casus 4', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
-        { id: 5, type: 'Engelstalig Onderzoek', title: 'Casus 5', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
-        { id: 6, type: 'Engelstalig Onderzoek', title: 'Casus 6', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
-        { id: 7, type: 'Engelstalig Onderzoek', title: 'Casus 7', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
-        { id: 8, type: 'Engelstalig Onderzoek', title: 'Casus 8', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
-        { id: 9, type: 'Groepsgesprek', title: 'Casus 2', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
-    ];
-
+    const casussenData = dummydata;
     return (
         <div>
             <div className="casussen-container">
                 {casussenData.map((casus) => (
                     <div key={casus.id} className="casus-card">
                         <h1>{casus.type}</h1>
-                        <h2>{casus.title}</h2>
-                        <p>{casus.description}</p>
+                        <h2>{casus.titel}</h2>
+                        <p>{casus.beschrijving}</p>
                         <button onClick={() => handleInschrijvenClick(casus)}>Inschrijven</button>
                     </div>
                 ))}
@@ -45,8 +34,9 @@ const Casussen = () => {
         &times;
       </span>
                         <h1>{selectedCasus.type}</h1>
-                        <h2>{selectedCasus.title}</h2>
-                        <p>{selectedCasus.description}</p>
+                        <h2>{selectedCasus.titel}</h2>
+                        <p>{selectedCasus.beschrijving}</p>
+                        
                         <button>Inschrijven</button>
                     </div>
                 </div>

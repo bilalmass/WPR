@@ -1,0 +1,56 @@
+﻿.user-portal {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.filters {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.filters label {
+    flex: 0 0 30%; /* Adjust the width as needed */
+}
+
+.users-list {
+    overflow-y: scroll;
+    height: calc(100vh - 40px); /* Change 40px to the height of your header */
+}
+
+.users-list h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.users-list ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.users-list li {
+    flex: 0 0 calc(33.33% - 20px); /* Divide the width into three columns with a small margin in between */
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    margin: 0 10px 15px 0; /* Add margin between the lists and on the bottom of each list */
+}
+
+.users-list li strong {
+    font-size: 1.125rem;
+}
+
+.users-list li p {
+    margin: 8px 0;
+    font-size: 1rem;
+}
+
+@media screen and (max-width: 768px) {
+    .users-list li {
+        flex: 0 0 calc(50% - 10px); /* Two columns on small screens */
+    }
+}

@@ -9,13 +9,13 @@
     display: flex;
     justify-content: space-around;
     margin-top: 20px;
-    margin-left: 150px;
-    margin-right: 150px;
+    margin-left: 25%;
+    margin-right: 25%;
 }
 
 .expertise-block {
     text-align: center;
-    border: 2px solid #000; /* Lijnen toevoegen om expertiseblokken */
+    border: 2px solid #000;
     border-radius: 8px;
     padding: 10px;
     margin: 10px;
@@ -50,4 +50,58 @@
 .about-us-section p {
     font-size: 16px;
     line-height: 1.5;
+}
+.nieuws-section {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.nieuws-section h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.nieuws-section ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.nieuws-section li {
+    background-color: #21CEA1;
+    width: 300px;
+    margin: 10px;
+    padding: 10px;
+    border: 2px solid #000;
+    border-radius: 8px;
+    text-align: left;
+}
+
+.nieuws-section li a {
+    text-decoration: none;
+    color: #000;
+}
+
+.nieuws-section li img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.nieuws-section li h3 {
+    color: #111329;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.nieuws-section li p {
+    color: #111329;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 10px;
 }

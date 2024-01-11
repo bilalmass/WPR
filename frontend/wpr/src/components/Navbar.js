@@ -1,32 +1,37 @@
-﻿import React, { useState } from 'react';
+﻿import React from 'react';
+import { Link } from 'react-router-dom';
 import './componentstyling/navbar.css';
 import logo from './media/Logo Icon/icon_accessibility.png';
+import { useAuth } from './AuthContext';
 
 const Navbar = () => {
-    // Stel de gebruikersstatus in (bijvoorbeeld ingelogd of niet-ingelogd)
-    const [isLoggedIn, setLoggedIn] = useState(false);
+    const { isLoggedIn, logOut } = useAuth(false);
+
+    const handleLogout = () => {
+        logOut();
+    };
 
     return (
         <nav>
             <div className="navbar-container">
                 <div className="navbar-left">
                     <img src={logo} className="navbar-logo" alt="logo" style={{ height: '50px' }} />
-                    <a href="Home" className="navbar-logo">Stichting Accessibility</a>
+                    <Link to="/home" className="navbar-logo">Stichting Accessibility</Link>
                 </div>
 
                 <ul className="navbar-links">
-                    <li><a href="#" className="navbar-link">Sectoren▼</a></li>
-                    <li><a href="casussen" className="navbar-link">Casussen▼</a></li>
-                    <li><a href="#" className="navbar-link">Toegankelijkheid▼</a></li>
-                    <li><a href="#" className="navbar-link">Actueel▼</a></li>
+                    <li><Link to="#" className="navbar-link">Sectoren▼</Link></li>
+                    <li><Link to="/casussen" className="navbar-link">Casussen▼</Link></li>
 
-                    {/* Voorwaardelijke weergave van de login-knop op basis van de gebruikersstatus */}
                     {isLoggedIn ? (
                         // Gebruiker is ingelogd
-                        <li><a href="account" className="login-button">Account▼</a></li>
+                        <>
+                            <li><Link to="#" className="navbar-link">Mijn Casussen▼</Link></li>
+                            <li><Link to="/usersettings" className="login-button">Account▼</Link></li>
+                        </>
                     ) : (
                         // Gebruiker is niet ingelogd
-                        <li><a href="login" className="login-button">Login▼</a></li>
+                        <li><Link to="/login" className="login-button">Login▼</Link></li>
                     )}
                 </ul>
             </div>

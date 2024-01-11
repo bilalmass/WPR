@@ -1,6 +1,6 @@
 ﻿// Footer.jsx
 import React from 'react';
-import './componentstyling/footer.css';  // Aangepaste import-paden
+import './componentstyling/footer.css';  
 
 const Footer = () => {
     return (

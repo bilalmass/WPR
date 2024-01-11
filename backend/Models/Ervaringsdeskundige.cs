@@ -1,7 +1,7 @@
 namespace Models;
 public class Ervaringsdeskundige : Gebruiker
 {
-    public int ErvaringsdeskundigeId {get; set;}
+    public string ErvaringsdeskundigeId {get; set;}
     public string? Voornaam {get; set;}
     public string? Achternaam {get; set;}
     public string? Telefoonnummer {get; set;}

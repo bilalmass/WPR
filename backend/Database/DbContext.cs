@@ -37,47 +37,55 @@ public class DbContext : IdentityDbContext
         modelBuilder.Entity<Gebruiker>()
             .HasMany(u => u.Chats)
             .WithOne(c => c.Verzender)
-            .HasForeignKey(c => c.ChatId);
+            .HasForeignKey(c => c.ChatId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         //Gebruiker&Rol relatie
         modelBuilder.Entity<Gebruiker>()
             .HasMany(u => u.GebruikerRollen)
             .WithOne(ur => ur.Gebruiker)
-            .HasForeignKey(ur => ur.GebruikerRolId);
+            .HasForeignKey(ur => ur.GebruikerRolId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<GebruikerRol>()
             .HasOne(ur => ur.Gebruiker)
             .WithMany(u => u.GebruikerRollen)
-            .HasForeignKey(ur => ur.GebruikerRolId);
+            .HasForeignKey(ur => ur.GebruikerRolId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<GebruikerRol>()
             .HasOne(ur => ur.Rol)
             .WithMany(r => r.GebruikerRollen)
-            .HasForeignKey(ur => ur.RoleId);
+            .HasForeignKey(ur => ur.RoleId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         // Chat & Bericht relatie
         modelBuilder.Entity<Chat>()
             .HasMany(c => c.Berichten)
             .WithOne(b => b.Chat)
-            .HasForeignKey(b => b.BerichtId);
+            .HasForeignKey(b => b.BerichtId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         // Bedrijf & Onderzoek relatie
         modelBuilder.Entity<Onderzoek>()
             .HasOne(o => o.Bedrijf)
             .WithMany(b => b.Onderzoeken)
-            .HasForeignKey(o => o.OnderzoekId);
+            .HasForeignKey(o => o.OnderzoekId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         // Verzorger & Ervaringsdeskundige relatie
         modelBuilder.Entity<Ervaringsdeskundige>()
             .HasOne(e => e.Verzorger)
             .WithMany(v => v.Ervaringsdeskundige)
-            .HasForeignKey(e => e.ErvaringsdeskundigeId);
+            .HasForeignKey(e => e.ErvaringsdeskundigeId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         // 
         modelBuilder.Entity<Ervaringsdeskundige>()
             .HasMany(e => e.Beschikbaarheid)        
             .WithOne(b => b.Ervaringsdeskundige)     
-            .HasForeignKey(b => b.BeschikbaarheidId);
+            .HasForeignKey(b => b.BeschikbaarheidId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<ErvaringsdeskundigeOnderzoek>()
             .HasKey(e => new { e.ErvaringsdeskundigeId, e.OnderzoekId });
@@ -85,12 +93,39 @@ public class DbContext : IdentityDbContext
         modelBuilder.Entity<ErvaringsdeskundigeOnderzoek>()
             .HasOne(eo => eo.Ervaringsdeskundige)
             .WithMany(e => e.Deelnames)
-            .HasForeignKey(eo => eo.ErvaringsdeskundigeId);
+            .HasForeignKey(eo => eo.ErvaringsdeskundigeId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<ErvaringsdeskundigeOnderzoek>()
             .HasOne(o => o.Onderzoek)
             .WithMany(d => d.Deelnemers)
-            .HasForeignKey(e => e.OnderzoekId);
+            .HasForeignKey(e => e.OnderzoekId)
+            .OnDelete(DeleteBehavior.Restrict);
+ modelBuilder.Entity<Gebruiker>()
+        .HasMany(u => u.Chats)
+        .WithOne(c => c.Verzender)
+        .HasForeignKey(c => c.ChatId)
+        .OnDelete(DeleteBehavior.Restrict);
 
+    // ... (andere configuraties)
+
+    // Gebruiker & Rol relatie
+    modelBuilder.Entity<Gebruiker>()
+        .HasMany(u => u.GebruikerRollen)
+        .WithOne(ur => ur.Gebruiker)
+        .HasForeignKey(ur => ur.GebruikerRolId)
+        .OnDelete(DeleteBehavior.Restrict);
+
+    modelBuilder.Entity<GebruikerRol>()
+        .HasOne(ur => ur.Gebruiker)
+        .WithMany(u => u.GebruikerRollen)
+        .HasForeignKey(ur => ur.GebruikerRolId)
+        .OnDelete(DeleteBehavior.Restrict);
+
+    modelBuilder.Entity<GebruikerRol>()
+        .HasOne(ur => ur.Rol)
+        .WithMany(r => r.GebruikerRollen)
+        .HasForeignKey(ur => ur.RoleId)
+        .OnDelete(DeleteBehavior.Restrict);
     }
 }

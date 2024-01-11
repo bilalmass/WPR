@@ -19,8 +19,8 @@ namespace Controller
         }
 
         [HttpPost]
-        [Route("login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequestData request)
+        [Route("BeheerderLogin")]
+        public async Task<IActionResult> Login([FromBody] BeheerderLoginRequestData request)
         {
             var result = await _signInManager.PasswordSignInAsync(request.GebruikersNaam, request.Wachtwoord, false, lockoutOnFailure: false);
 
@@ -34,7 +34,7 @@ namespace Controller
             }
         }
 
-        public class LoginRequestData
+        public class BeheerderLoginRequestData
         {
             [Required(ErrorMessage = "Username is required")]
             public string GebruikersNaam { get; set; }

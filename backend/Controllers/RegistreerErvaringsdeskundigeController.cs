@@ -19,8 +19,8 @@ namespace Controller
         }
 
         [HttpPost]
-        [Route("registreer")]
-        public async Task<IActionResult> CreateAccount([FromBody] CreateAccountRequestData request)
+        [Route("Registreer")]
+        public async Task<IActionResult> CreateAccount([FromBody] CreateErvaringsdeskundigeRequestData request)
         {
             var user = new Gebruiker { UserName = request.GebruikersNaam, Email = request.Email };
             var result = await _userManager.CreateAsync(user, request.Wachtwoord);
@@ -28,7 +28,7 @@ namespace Controller
             return result.Succeeded ? CreatedAtAction(nameof(CreateAccount), user) : BadRequest(result.Errors);
         }
 
-        public class CreateAccountRequestData
+        public class CreateErvaringsdeskundigeRequestData
         {
             [Required(ErrorMessage = "Username is required")]
             public string GebruikersNaam { get; set; }

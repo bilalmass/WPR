@@ -2,7 +2,7 @@ namespace Models;
 
 public class Onderzoek
 {
-    public int OnderzoekId {get; set;}
+    public string OnderzoekId {get; set;}
     public string? Titel {get; set;}
     public string? Beschrijving {get; set;}
     public DateTime? Start {get; set;}

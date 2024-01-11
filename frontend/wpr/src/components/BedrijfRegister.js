@@ -1,11 +1,11 @@
-﻿/* Register.js */
+﻿/* BedrijfRegister.js */
 import React, { useState } from 'react';
 import './componentstyling/registerpage.css';
 import axios from 'axios';
 
-const Register = () => {
+const BedrijfRegister = () => {
     const [formData, setFormData] = useState({
-        firstName: '',
+        bedrijfsnaam: '',
         lastName: '',
         email: '',
         phoneNumber: '',
@@ -31,45 +31,21 @@ const Register = () => {
             setPasswordError('Wachtwoord voldoet niet aan de beveiligingseisen.');
             return;
         }
-        RegistreerErvaringsdeskundige();
         if (formData.password !== formData.confirmPassword) {
             setPasswordError('Wachtwoorden komen niet overeen.');
             return;
-        }   
-        
+        }
+
         console.log('Registratiegegevens:', formData);
     };
-
-    function RegistreerErvaringsdeskundige()
-    {
-        fetch("https://localhost:7211/Registreer/ervaringsdeskundige", {
-            method: "POST",
-            mode: "cors",
-            headers: {
-                'Acces-Control-Allow-Origin': '*',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                "firstName": formData.firstName,
-                "lastName": formData.lastName,
-                "email": formData.email,
-                "phoneNumber": formData.phoneNumber,
-                "password": formData.password,
-                "gender": formData.gender,
-                "birthDate": formData.birthDate
-            })
-        })
-        .then(response => response.json())
-        .then(data => console.log(data));
-    }
 
     return (
         <div className="registration-container">
             <div className="registration-form">
                 <div className="form-row">
                     <div className="input-group">
-                        <label>Voornaam:</label>
-                        <input type="text" name="firstName" value={formData.firstName} onChange={handleInputChange} />
+                        <label>Bedrijfsnaam:</label>
+                        <input type="text" name="bedrijfsnaam" value={formData.bedrijfsnaam} onChange={handleInputChange} />
                     </div>
 
                     <div className="input-group">
@@ -99,25 +75,25 @@ const Register = () => {
                     <div className="input-group">
                         <label>Bevestig wachtwoord:</label>
                         <input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleInputChange} />
-                        {passwordError && <p className="error">{passwordError}</p>}
                     </div>
                 </div>
+                {passwordError && <p className="error">{passwordError}</p>}
 
-                    <div className="form-row">
-                        <div className="input-group">
-                            <label>Geboortedatum:</label>
-                            <input type="date" name="birthDate" value={formData.birthDate} onChange={handleInputChange} />
-                        </div>
-    
-                        <div className="input-group">
-                            <label>Geslacht:</label>
-                            <select name="gender" value={formData.gender} onChange={handleInputChange}>
-                                <option value="male">Man</option>
-                                <option value="female">Vrouw</option>
-                                <option value="other">Zeg ik liever niet</option>
-                            </select>
-                        </div>
+                <div className="form-row">
+                    <div className="input-group">
+                        <label>Geboortedatum:</label>
+                        <input type="date" name="birthDate" value={formData.birthDate} onChange={handleInputChange} />
                     </div>
+
+                    <div className="input-group">
+                        <label>Geslacht:</label>
+                        <select name="gender" value={formData.gender} onChange={handleInputChange}>
+                            <option value="male">Man</option>
+                            <option value="female">Vrouw</option>
+                            <option value="other">Zeg ik liever niet</option>
+                        </select>
+                    </div>
+                </div>
 
 
                 <button onClick={handleRegisterClick}>Registreren</button>
@@ -126,4 +102,4 @@ const Register = () => {
     );
 };
 
-export default Register;
+export default BedrijfRegister;

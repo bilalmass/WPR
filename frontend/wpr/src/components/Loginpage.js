@@ -1,5 +1,4 @@
-﻿// LoginPage.js
-import React from 'react';
+﻿import React from 'react';
 import './componentstyling/loginpage.css';
 
 const Login = () => {

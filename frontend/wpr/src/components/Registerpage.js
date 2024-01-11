@@ -1,4 +1,5 @@
-﻿import React, { useState } from 'react';
+﻿/* Register.js */
+import React, { useState } from 'react';
 import './componentstyling/registerpage.css';
 import axios from 'axios';
 
@@ -30,6 +31,7 @@ const Register = () => {
             setPasswordError('Wachtwoord voldoet niet aan de beveiligingseisen.');
             return;
         }
+        RegistreerErvaringsdeskundige();
         if (formData.password !== formData.confirmPassword) {
             setPasswordError('Wachtwoorden komen niet overeen.');
             return;
@@ -37,6 +39,29 @@ const Register = () => {
         
         console.log('Registratiegegevens:', formData);
     };
+
+    function RegistreerErvaringsdeskundige()
+    {
+        fetch("https://localhost:7211/Registreer/ervaringsdeskundige", {
+            method: "POST",
+            mode: "cors",
+            headers: {
+                'Acces-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "firstName": formData.firstName,
+                "lastName": formData.lastName,
+                "email": formData.email,
+                "phoneNumber": formData.phoneNumber,
+                "password": formData.password,
+                "gender": formData.gender,
+                "birthDate": formData.birthDate
+            })
+        })
+        .then(response => response.json())
+        .then(data => console.log(data));
+    }
 
     return (
         <div className="registration-container">
@@ -74,9 +99,9 @@ const Register = () => {
                     <div className="input-group">
                         <label>Bevestig wachtwoord:</label>
                         <input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleInputChange} />
+                        {passwordError && <p className="error">{passwordError}</p>}
                     </div>
                 </div>
-                {passwordError && <p className="error">{passwordError}</p>}
 
                     <div className="form-row">
                         <div className="input-group">

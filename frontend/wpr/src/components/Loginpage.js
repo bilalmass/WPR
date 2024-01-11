@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import './componentstyling/loginpage.css';
 import { Link } from 'react-router-dom';
 import userDummyData from './dummydata/userdummy';

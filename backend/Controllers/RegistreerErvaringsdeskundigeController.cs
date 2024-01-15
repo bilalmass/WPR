@@ -19,13 +19,24 @@ namespace Controller
         }
 
         [HttpPost]
-        [Route("Registreer")]
+        [Route("ErvaringsdeskundigeRegistreer")]
         public async Task<IActionResult> CreateAccount([FromBody] CreateErvaringsdeskundigeRequestData request)
         {
             var user = new Gebruiker { UserName = request.GebruikersNaam, Email = request.Email };
             var result = await _userManager.CreateAsync(user, request.Wachtwoord);
 
-            return result.Succeeded ? CreatedAtAction(nameof(CreateAccount), user) : BadRequest(result.Errors);
+            if (result.Succeeded)
+            {
+                // Voeg de gebruiker toe aan de "Ervaringsdeskundige"-rol
+                await _userManager.AddToRoleAsync(user, Rol.Ervaringsdeskundige);
+
+                // Optioneel: Inloggen na registratie
+                await _signInManager.SignInAsync(user, isPersistent: false);
+
+                return CreatedAtAction(nameof(CreateAccount), user);
+            }
+
+            return BadRequest(result.Errors);
         }
 
         public class CreateErvaringsdeskundigeRequestData

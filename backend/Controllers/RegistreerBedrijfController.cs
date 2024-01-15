@@ -18,6 +18,7 @@ namespace Controller
             _userManager = userManager;
         }
 
+        
         [HttpPost]
         [Route("BedrijfRegistreer")]
         public async Task<IActionResult> CreateAccount([FromBody] CreateBedrijfRequestData request)
@@ -25,8 +26,20 @@ namespace Controller
             var user = new Gebruiker { UserName = request.GebruikersNaam, Email = request.Email };
             var result = await _userManager.CreateAsync(user, request.Wachtwoord);
 
-            return result.Succeeded ? CreatedAtAction(nameof(CreateAccount), user) : BadRequest(result.Errors);
+            if (result.Succeeded)
+            {
+                // Voeg de gebruiker toe aan de "Bedrijf"-rol
+                await _userManager.AddToRoleAsync(user, Rol.Bedrijf);
+
+                // Optioneel: Inloggen na registratie
+                await _signInManager.SignInAsync(user, isPersistent: false);
+
+                return CreatedAtAction(nameof(CreateAccount), user);
+            }
+
+            return BadRequest(result.Errors);
         }
+
 
         public class CreateBedrijfRequestData
         {

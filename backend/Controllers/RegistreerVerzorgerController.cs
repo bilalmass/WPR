@@ -11,11 +11,13 @@ namespace Controller
     {
         private readonly SignInManager<Gebruiker> _signInManager;
         private readonly UserManager<Gebruiker> _userManager;
+        private readonly DbContext _context;
 
-        public RegistreerVerzorgerController(SignInManager<Gebruiker> signInManager, UserManager<Gebruiker> userManager)
+        public RegistreerVerzorgerController(SignInManager<Gebruiker> signInManager, UserManager<Gebruiker> userManager, DbContext context)
         {
             _signInManager = signInManager;
             _userManager = userManager;
+            _context = context;
         }
 
         [HttpPost]

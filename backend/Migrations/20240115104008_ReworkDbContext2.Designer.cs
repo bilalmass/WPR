@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace backend.Migrations
 {
     [DbContext(typeof(DbContext))]
-    [Migration("20240111131309_ondelete")]
-    partial class ondelete
+    [Migration("20240115104008_ReworkDbContext2")]
+    partial class ReworkDbContext2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -34,7 +34,12 @@ namespace backend.Migrations
                     b.Property<DateTime?>("Eind")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("ErvaringsdeskundigeId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("BeschikbaarheidId");
+
+                    b.HasIndex("ErvaringsdeskundigeId");
 
                     b.ToTable("Beschikbaarheden");
                 });
@@ -278,10 +283,15 @@ namespace backend.Migrations
                     b.Property<string>("BerichtId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("ChatId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Text")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("BerichtId");
+
+                    b.HasIndex("ChatId");
 
                     b.ToTable("Berichten");
                 });
@@ -291,20 +301,33 @@ namespace backend.Migrations
                     b.Property<string>("ChatId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("VerzenderId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("ChatId");
+
+                    b.HasIndex("VerzenderId");
 
                     b.ToTable("Chats");
                 });
 
             modelBuilder.Entity("Models.ErvaringsdeskundigeOnderzoek", b =>
                 {
+                    b.Property<int>("ErvaringsdeskundigeOnderzoekId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ErvaringsdeskundigeOnderzoekId"), 1L, 1);
+
                     b.Property<string>("ErvaringsdeskundigeId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("OnderzoekId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("ErvaringsdeskundigeId", "OnderzoekId");
+                    b.HasKey("ErvaringsdeskundigeOnderzoekId");
+
+                    b.HasIndex("ErvaringsdeskundigeId");
 
                     b.HasIndex("OnderzoekId");
 
@@ -314,6 +337,9 @@ namespace backend.Migrations
             modelBuilder.Entity("Models.Onderzoek", b =>
                 {
                     b.Property<string>("OnderzoekId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("BedrijfId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Beloning")
@@ -342,6 +368,8 @@ namespace backend.Migrations
 
                     b.HasKey("OnderzoekId");
 
+                    b.HasIndex("BedrijfId");
+
                     b.ToTable("Onderzoeken");
                 });
 
@@ -360,11 +388,19 @@ namespace backend.Migrations
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserRole<string>");
 
-                    b.Property<string>("GebruikerRolId")
-                        .IsRequired()
+                    b.Property<string>("GebruikerId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasIndex("GebruikerRolId");
+                    b.Property<string>("GebruikerRolId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RolId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasIndex("GebruikerId");
+
+                    b.HasIndex("RolId");
 
                     b.HasDiscriminator().HasValue("GebruikerRol");
                 });
@@ -380,10 +416,6 @@ namespace backend.Migrations
                 {
                     b.HasBaseType("Models.Gebruiker");
 
-                    b.Property<string>("BedrijfId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasDiscriminator().HasValue("Bedrijf");
                 });
 
@@ -396,10 +428,6 @@ namespace backend.Migrations
 
                     b.Property<bool?>("Data")
                         .HasColumnType("bit");
-
-                    b.Property<string>("ErvaringsdeskundigeId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Geboortedatum")
                         .IsRequired()
@@ -414,10 +442,13 @@ namespace backend.Migrations
                     b.Property<string>("Telefoonnummer")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("VerzorgerId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Voornaam")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("ErvaringsdeskundigeId");
+                    b.HasIndex("VerzorgerId");
 
                     b.HasDiscriminator().HasValue("Ervaringsdeskundige");
                 });
@@ -426,10 +457,6 @@ namespace backend.Migrations
                 {
                     b.HasBaseType("Models.Gebruiker");
 
-                    b.Property<string>("VerzorgerId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasDiscriminator().HasValue("Verzorger");
                 });
 
@@ -437,9 +464,7 @@ namespace backend.Migrations
                 {
                     b.HasOne("Models.Ervaringsdeskundige", "Ervaringsdeskundige")
                         .WithMany("Beschikbaarheid")
-                        .HasForeignKey("BeschikbaarheidId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("ErvaringsdeskundigeId");
 
                     b.Navigation("Ervaringsdeskundige");
                 });
@@ -506,9 +531,7 @@ namespace backend.Migrations
                 {
                     b.HasOne("Models.Chat", "Chat")
                         .WithMany("Berichten")
-                        .HasForeignKey("BerichtId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("ChatId");
 
                     b.Navigation("Chat");
                 });
@@ -517,9 +540,7 @@ namespace backend.Migrations
                 {
                     b.HasOne("Models.Gebruiker", "Verzender")
                         .WithMany("Chats")
-                        .HasForeignKey("ChatId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("VerzenderId");
 
                     b.Navigation("Verzender");
                 });
@@ -528,15 +549,11 @@ namespace backend.Migrations
                 {
                     b.HasOne("Models.Ervaringsdeskundige", "Ervaringsdeskundige")
                         .WithMany("Deelnames")
-                        .HasForeignKey("ErvaringsdeskundigeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("ErvaringsdeskundigeId");
 
                     b.HasOne("Models.Onderzoek", "Onderzoek")
                         .WithMany("Deelnemers")
-                        .HasForeignKey("OnderzoekId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("OnderzoekId");
 
                     b.Navigation("Ervaringsdeskundige");
 
@@ -547,9 +564,7 @@ namespace backend.Migrations
                 {
                     b.HasOne("Models.Bedrijf", "Bedrijf")
                         .WithMany("Onderzoeken")
-                        .HasForeignKey("OnderzoekId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("BedrijfId");
 
                     b.Navigation("Bedrijf");
                 });
@@ -558,16 +573,11 @@ namespace backend.Migrations
                 {
                     b.HasOne("Models.Gebruiker", "Gebruiker")
                         .WithMany("GebruikerRollen")
-                        .HasForeignKey("GebruikerRolId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("GebruikerId");
 
                     b.HasOne("Models.Rol", "Rol")
                         .WithMany("GebruikerRollen")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_AspNetUserRoles_AspNetRoles_RoleId1");
+                        .HasForeignKey("RolId");
 
                     b.Navigation("Gebruiker");
 
@@ -578,9 +588,7 @@ namespace backend.Migrations
                 {
                     b.HasOne("Models.Verzorger", "Verzorger")
                         .WithMany("Ervaringsdeskundige")
-                        .HasForeignKey("ErvaringsdeskundigeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("VerzorgerId");
 
                     b.Navigation("Verzorger");
                 });

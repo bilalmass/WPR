@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace backend.Migrations
 {
-    public partial class EersteMigratieSQLServerDB : Migration
+    public partial class ReworkDbContext2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -29,6 +29,16 @@ namespace backend.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    GebruikerId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Voornaam = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Achternaam = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Telefoonnummer = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Geboortedatum = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PostCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Geslacht = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Data = table.Column<bool>(type: "bit", nullable: true),
+                    VerzorgerId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -47,50 +57,11 @@ namespace backend.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Gebruikers",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    GebruikerId = table.Column<int>(type: "int", nullable: false),
-                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BedrijfId = table.Column<int>(type: "int", nullable: true),
-                    ErvaringsdeskundigeId = table.Column<int>(type: "int", nullable: true),
-                    Voornaam = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Achternaam = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Telefoonnummer = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Geboortedatum = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PostCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Geslacht = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Data = table.Column<bool>(type: "bit", nullable: true),
-                    VerzorgerId = table.Column<int>(type: "int", nullable: true),
-                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Gebruikers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Gebruikers_Gebruikers_ErvaringsdeskundigeId",
-                        column: x => x.ErvaringsdeskundigeId,
-                        principalTable: "Gebruikers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_AspNetUsers_AspNetUsers_VerzorgerId",
+                        column: x => x.VerzorgerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -156,6 +127,44 @@ namespace backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AspNetUserRoles",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    GebruikerRolId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    GebruikerId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    RolId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AspNetUserRoles_AspNetRoles_RolId",
+                        column: x => x.RolId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_AspNetUserRoles_AspNetUsers_GebruikerId",
+                        column: x => x.GebruikerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_AspNetUserRoles_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
@@ -176,53 +185,20 @@ namespace backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUserRoles",
-                columns: table => new
-                {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    GebruikerRolId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
-                    table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "AspNetRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AspNetUserRoles_Gebruikers_GebruikerRolId",
-                        column: x => x.GebruikerRolId,
-                        principalTable: "Gebruikers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Beperking",
                 columns: table => new
                 {
-                    BeperkingId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Naam = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ErvaringsdeskundigeId = table.Column<int>(type: "int", nullable: true)
+                    BeperkingId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Naam = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ErvaringsdeskundigeId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Beperking", x => x.BeperkingId);
                     table.ForeignKey(
-                        name: "FK_Beperking_Gebruikers_ErvaringsdeskundigeId",
+                        name: "FK_Beperking_AspNetUsers_ErvaringsdeskundigeId",
                         column: x => x.ErvaringsdeskundigeId,
-                        principalTable: "Gebruikers",
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id");
                 });
 
@@ -230,103 +206,103 @@ namespace backend.Migrations
                 name: "Beschikbaarheden",
                 columns: table => new
                 {
-                    BeschikbaarheidId = table.Column<int>(type: "int", nullable: false),
-                    Begin = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Eind = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    BeschikbaarheidId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ErvaringsdeskundigeId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Begin = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Eind = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Beschikbaarheden", x => x.BeschikbaarheidId);
                     table.ForeignKey(
-                        name: "FK_Beschikbaarheden_Gebruikers_BeschikbaarheidId",
-                        column: x => x.BeschikbaarheidId,
-                        principalTable: "Gebruikers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_Beschikbaarheden_AspNetUsers_ErvaringsdeskundigeId",
+                        column: x => x.ErvaringsdeskundigeId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "Chats",
                 columns: table => new
                 {
-                    ChatId = table.Column<int>(type: "int", nullable: false)
+                    ChatId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    VerzenderId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Chats", x => x.ChatId);
                     table.ForeignKey(
-                        name: "FK_Chats_Gebruikers_ChatId",
-                        column: x => x.ChatId,
-                        principalTable: "Gebruikers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_Chats_AspNetUsers_VerzenderId",
+                        column: x => x.VerzenderId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "Onderzoeken",
                 columns: table => new
                 {
-                    OnderzoekId = table.Column<int>(type: "int", nullable: false),
-                    Titel = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Beschrijving = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Start = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Locatie = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Beloning = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Categorie = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    OnderzoekId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Titel = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Beschrijving = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Start = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Locatie = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Beloning = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Categorie = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BedrijfId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Onderzoeken", x => x.OnderzoekId);
                     table.ForeignKey(
-                        name: "FK_Onderzoeken_Gebruikers_OnderzoekId",
-                        column: x => x.OnderzoekId,
-                        principalTable: "Gebruikers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_Onderzoeken_AspNetUsers_BedrijfId",
+                        column: x => x.BedrijfId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "Berichten",
                 columns: table => new
                 {
-                    BerichtId = table.Column<int>(type: "int", nullable: false),
-                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    BerichtId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ChatId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Berichten", x => x.BerichtId);
                     table.ForeignKey(
-                        name: "FK_Berichten_Chats_BerichtId",
-                        column: x => x.BerichtId,
+                        name: "FK_Berichten_Chats_ChatId",
+                        column: x => x.ChatId,
                         principalTable: "Chats",
-                        principalColumn: "ChatId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ChatId");
                 });
 
             migrationBuilder.CreateTable(
                 name: "DeelnemersOnderzoek",
                 columns: table => new
                 {
-                    ErvaringsdeskundigeId = table.Column<int>(type: "int", nullable: false),
-                    OnderzoekId = table.Column<int>(type: "int", nullable: false)
+                    ErvaringsdeskundigeOnderzoekId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ErvaringsdeskundigeId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    OnderzoekId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DeelnemersOnderzoek", x => new { x.ErvaringsdeskundigeId, x.OnderzoekId });
+                    table.PrimaryKey("PK_DeelnemersOnderzoek", x => x.ErvaringsdeskundigeOnderzoekId);
                     table.ForeignKey(
-                        name: "FK_DeelnemersOnderzoek_Gebruikers_ErvaringsdeskundigeId",
+                        name: "FK_DeelnemersOnderzoek_AspNetUsers_ErvaringsdeskundigeId",
                         column: x => x.ErvaringsdeskundigeId,
-                        principalTable: "Gebruikers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_DeelnemersOnderzoek_Onderzoeken_OnderzoekId",
                         column: x => x.OnderzoekId,
                         principalTable: "Onderzoeken",
-                        principalColumn: "OnderzoekId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "OnderzoekId");
                 });
 
             migrationBuilder.CreateIndex(
@@ -352,9 +328,9 @@ namespace backend.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserRoles_GebruikerRolId",
+                name: "IX_AspNetUserRoles_GebruikerId",
                 table: "AspNetUserRoles",
-                column: "GebruikerRolId");
+                column: "GebruikerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserRoles_RoleId",
@@ -362,9 +338,19 @@ namespace backend.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserRoles_RolId",
+                table: "AspNetUserRoles",
+                column: "RolId");
+
+            migrationBuilder.CreateIndex(
                 name: "EmailIndex",
                 table: "AspNetUsers",
                 column: "NormalizedEmail");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_VerzorgerId",
+                table: "AspNetUsers",
+                column: "VerzorgerId");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
@@ -379,14 +365,34 @@ namespace backend.Migrations
                 column: "ErvaringsdeskundigeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Berichten_ChatId",
+                table: "Berichten",
+                column: "ChatId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Beschikbaarheden_ErvaringsdeskundigeId",
+                table: "Beschikbaarheden",
+                column: "ErvaringsdeskundigeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Chats_VerzenderId",
+                table: "Chats",
+                column: "VerzenderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DeelnemersOnderzoek_ErvaringsdeskundigeId",
+                table: "DeelnemersOnderzoek",
+                column: "ErvaringsdeskundigeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_DeelnemersOnderzoek_OnderzoekId",
                 table: "DeelnemersOnderzoek",
                 column: "OnderzoekId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Gebruikers_ErvaringsdeskundigeId",
-                table: "Gebruikers",
-                column: "ErvaringsdeskundigeId");
+                name: "IX_Onderzoeken_BedrijfId",
+                table: "Onderzoeken",
+                column: "BedrijfId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -422,16 +428,13 @@ namespace backend.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
                 name: "Chats");
 
             migrationBuilder.DropTable(
                 name: "Onderzoeken");
 
             migrationBuilder.DropTable(
-                name: "Gebruikers");
+                name: "AspNetUsers");
         }
     }
 }

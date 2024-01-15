@@ -13,6 +13,7 @@ import BeheerderportalUser from './pages/BeheerderUserView'
 import BeheerderportalOnderzoeken from './pages/BeheerderOnderzoekView'
 import Bedrijfportal from './pages/Bedrijfportal'
 import Bedrijfportalonderzoek from './pages/Bedrijfportalonderzoek'
+import Mijncasussen from './pages/Mijncasussen'
 
 
 export default function App() {
@@ -51,6 +52,7 @@ export default function App() {
                     <Route path="/beheerderportal/gebruikers" element={<BeheerderportalUser />} />
                     <Route path="/bedrijfportaal" element={<Bedrijfportal />} />
                     <Route path="/bedrijfportaal/onderzoeken" element={<Bedrijfportalonderzoek />} />
+                    <Route path="/mijncasussen" element={<Mijncasussen />} />
 
                 </Routes>
             </BrowserRouter>

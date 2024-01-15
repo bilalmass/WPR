@@ -5,7 +5,7 @@ import logo from './media/Logo Icon/icon_accessibility.png';
 import { useAuth } from './AuthContext';
 
 const Navbar = () => {
-    const { isLoggedIn, logOut } = useAuth(false);
+    const { isLoggedIn, userRole, logOut } = useAuth(false);
 
     const handleLogout = () => {
         logOut();
@@ -20,17 +20,30 @@ const Navbar = () => {
                 </div>
 
                 <ul className="navbar-links">
-                    <li><Link to="#" className="navbar-link">Sectoren▼</Link></li>
                     <li><Link to="/casussen" className="navbar-link">Casussen▼</Link></li>
 
-                    {isLoggedIn ? (
-                        // Gebruiker is ingelogd
-                        <>
-                            <li><Link to="#" className="navbar-link">Mijn Casussen▼</Link></li>
+                    {isLoggedIn && userRole === 'gebruiker' && (
+                        <>  
+                            <li><Link to="/mijncasussen" className="navbar-link">Mijn Casussen▼</Link></li>
                             <li><Link to="/usersettings" className="login-button">Account▼</Link></li>
                         </>
-                    ) : (
-                        // Gebruiker is niet ingelogd
+                    )}
+
+                    {isLoggedIn && userRole === 'bedrijf' && (
+                        <>
+                            <li><Link to="/bedrijfportaal" className="navbar-link">Bedrijfsportaal▼</Link></li>
+                            <li><Link to="/" onClick={handleLogout} className="login-button">Uitloggen▼</Link></li>
+                        </>
+                    )}
+
+                    {isLoggedIn && userRole === 'beheerder' && (
+                        <>
+                            <li><Link to="/beheerderportal" className="navbar-link">Beheerdersportaal▼</Link></li>
+                            <li><Link to="/logout" onClick={handleLogout} className="login-button">Uitloggen▼</Link></li>
+                        </>
+                    )}
+
+                    {!isLoggedIn && (
                         <li><Link to="/login" className="login-button">Login▼</Link></li>
                     )}
                 </ul>

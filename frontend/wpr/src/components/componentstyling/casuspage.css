@@ -10,9 +10,9 @@
     gap: 30px;
     padding: 20px;
     justify-content: center;
-    margin-bottom: 5%;
     margin-left: 5%;
     margin-right: 5%;
+    
 }
 
 .casus-card {
@@ -46,13 +46,16 @@
 }
 
 button {
-    background-color: #4caf50;
+    background-color: #1CA883;
     color: white;
     padding: 10px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     margin-top: 10px;
+}
+button:hover {
+    background-color: #187662; /* Darker color for hover state */
 }
 
 @media only screen and (max-width: 768px) {

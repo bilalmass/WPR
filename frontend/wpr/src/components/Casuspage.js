@@ -1,12 +1,19 @@
 ﻿import React, { useState } from 'react';
 import './componentstyling/casuspage.css';
 import dummydata from './dummydata/onderzoekendummy'
+import { useAuth } from './AuthContext';
 
 const Casussen = () => {
     const [selectedCasus, setSelectedCasus] = useState(null);
+    const { isLoggedIn, logOut } = useAuth(false);
+    const [userRole, setUserRole] = useState('gast');
 
     const handleInschrijvenClick = (casus) => {
-        setSelectedCasus(casus);
+        if (isLoggedIn) {
+            setSelectedCasus(casus);
+        } else {
+            console.log("Please log in to subscribe.");
+        }
     };
 
     const sluitVenster = () => {
@@ -22,7 +29,7 @@ const Casussen = () => {
                         <h1>{casus.type}</h1>
                         <h2>{casus.titel}</h2>
                         <p>{casus.beschrijving}</p>
-                        <button onClick={() => handleInschrijvenClick(casus)}>Inschrijven</button>
+                        <button className={"button"} onClick={() => handleInschrijvenClick(casus)}>Inschrijven</button>
                     </div>
                 ))}
             </div>

@@ -1,36 +1,24 @@
-﻿.beheerder-portal {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-}
+﻿/* beheerderpage.css */
 
-.onderzoeken-lijst {
-    margin-top: 20px;
-}
-
-.onderzoeken-lijst h2 {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-}
-
-.onderzoeken-lijst ul {
-    list-style: none;
-    padding: 0;
-}
-
-.onderzoeken-lijst li {
-    border: 1px solid #ccc;
+.portal-button {
+    background-color: #2B50EC;
+    color: white; 
+    padding: 10px 20px;
+    font-size: 16px;
     border-radius: 5px;
-    margin-bottom: 10px;
-    padding: 10px;
+    cursor: pointer;
+    margin-right: 10px;
 }
 
-.onderzoeken-lijst li strong {
-    font-size: 1.2rem;
-    display: block;
-    margin-bottom: 5px;
+.portal-button:hover {
+    background-color: #1d3b92;
 }
 
-.onderzoeken-lijst li p {
-    margin: 0;
+.beheerder-portal {
+    text-align: center;
+    margin: 50px auto;
+}
+
+.beheerder-portal h1 {
+    color: black;
 }

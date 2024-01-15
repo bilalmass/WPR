@@ -21,7 +21,7 @@ const UserSettings = () => {
 
     
     
-    const handleEditClick = () => {
+    const handleEditClick = () => { 
         setIsEditing(true);
     };
     const navigate = useNavigate();
@@ -107,26 +107,30 @@ const UserSettings = () => {
               &times;
             </span>
                         <h1>Editing Beperkingen</h1>
+                        <span>Blindheid</span>
                         <input
                             type="checkbox"
                             checked={blindness}
                             onChange={() => setBlindness(!blindness)}
                         />
-                        <span>Blindheid</span>
+
                         <br />
+                        
+                        <span>Slechtziendheid</span>
                         <input
                             type="checkbox"
                             checked={lowVision}
                             onChange={() => setLowVision(!lowVision)}
                         />
-                        <span>Slechtziendheid</span>
+
                         <br />
+
+                        <span>Kleurenblindheid</span>
                         <input
                             type="checkbox"
                             checked={colorBlindness}
                             onChange={() => setColorBlindness(!colorBlindness)}
                         />
-                        <span>Kleurenblindheid</span>
                         <br />
                         <button className="btnopslaan" onClick={handleSave}>
                             Opslaan

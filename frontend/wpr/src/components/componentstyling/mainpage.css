@@ -1,6 +1,11 @@
-﻿.mainpage {
+﻿body {
+    margin: 0;
+    padding: 0;
+}
+
+.mainpage {
+    margin-bottom: 100px;
     background-color: #d9ebf7;
-    margin: 0 auto;
     padding: 20px;
     margin-left: 0;
     margin-right: 0;
@@ -12,7 +17,6 @@
     margin-left: 25%;
     margin-right: 25%;
 }
-
 .expertise-block {
     text-align: center;
     border: 2px solid #000;

@@ -1,4 +1,9 @@
-﻿.casussen-container {
+﻿body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+.casussen-container {
     margin-top: 5%;
     display: flex;
     flex-wrap: wrap;

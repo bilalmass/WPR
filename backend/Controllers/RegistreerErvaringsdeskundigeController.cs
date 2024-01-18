@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 using Models;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
 
 namespace Controller
 {
@@ -11,33 +12,57 @@ namespace Controller
     {
         private readonly SignInManager<Gebruiker> _signInManager;
         private readonly UserManager<Gebruiker> _userManager;
+        private readonly RoleManager<Rol> _roleManager;
 
-        public RegistreerErvaringsdeskundigeController(SignInManager<Gebruiker> signInManager, UserManager<Gebruiker> userManager)
+        public RegistreerErvaringsdeskundigeController(
+            SignInManager<Gebruiker> signInManager,
+            UserManager<Gebruiker> userManager,
+            RoleManager<Rol> roleManager)
         {
             _signInManager = signInManager;
             _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         [HttpPost]
         [Route("ErvaringsdeskundigeRegistreer")]
         public async Task<IActionResult> CreateAccount([FromBody] CreateErvaringsdeskundigeRequestData request)
         {
-            var user = new Gebruiker { UserName = request.GebruikersNaam, Email = request.Email };
-            var result = await _userManager.CreateAsync(user, request.Wachtwoord);
-
-            if (result.Succeeded)
+            // Controleer of de rol 'Ervaringsdeskundige' bestaat, zo niet, maak de rol aan
+            var ErvaringsdeskundigeRolExist = await _roleManager.RoleExistsAsync(Rol.Ervaringsdeskundige);
+            if (!ErvaringsdeskundigeRolExist)
             {
-                // Voeg de gebruiker toe aan de "Ervaringsdeskundige"-rol
-                await _userManager.AddToRoleAsync(user, Rol.Ervaringsdeskundige);
-
-                // Optioneel: Inloggen na registratie
-                await _signInManager.SignInAsync(user, isPersistent: false);
-
-                return CreatedAtAction(nameof(CreateAccount), user);
+                await _roleManager.CreateAsync(new Rol { Name = Rol.Ervaringsdeskundige });
             }
 
-            return BadRequest(result.Errors);
+            var user = new Gebruiker
+            {
+                UserName = request.GebruikersNaam,
+                Email = request.Email,
+                Discriminator = Rol.Ervaringsdeskundige
+            };
+
+            var resultCreateUser = await _userManager.CreateAsync(user, request.Wachtwoord);
+
+            if (resultCreateUser.Succeeded)
+            {
+                // Wijs de rol 'Ervaringsdeskundige' toe aan de gebruiker van het Ervaringsdeskundige
+                var resultAddToRole = await _userManager.AddToRoleAsync(user, "Ervaringsdeskundige");
+
+                if (resultAddToRole.Succeeded)
+                {
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    return CreatedAtAction(nameof(CreateAccount), user);
+                }
+                else
+                {
+                    return BadRequest(resultAddToRole.Errors);
+                }
+            }
+
+            return BadRequest(resultCreateUser.Errors);
         }
+
 
         public class CreateErvaringsdeskundigeRequestData
         {

@@ -1,11 +1,16 @@
 namespace Models;
 
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
 
 public class Gebruiker : IdentityUser
 {
-    public string GebruikerId {get; set;}
-    public ICollection<Chat>? Chats {get; set;}
-    public ICollection<GebruikerRol>? GebruikerRollen {get; set;}
-
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public override string Id { get; set; }
+    public ICollection<Chat>? Chats { get; set; }
+    
+    // Discriminator toevoegen
+    public string Discriminator { get; set; }
 }

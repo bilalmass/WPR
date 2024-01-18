@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 using Models;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
 
 namespace Controller
 {
@@ -11,22 +12,57 @@ namespace Controller
     {
         private readonly SignInManager<Gebruiker> _signInManager;
         private readonly UserManager<Gebruiker> _userManager;
+        private readonly RoleManager<Rol> _roleManager;
 
-        public RegistreerBedrijfController(SignInManager<Gebruiker> signInManager, UserManager<Gebruiker> userManager)
+        public RegistreerBedrijfController(
+            SignInManager<Gebruiker> signInManager,
+            UserManager<Gebruiker> userManager,
+            RoleManager<Rol> roleManager)
         {
             _signInManager = signInManager;
             _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         [HttpPost]
         [Route("BedrijfRegistreer")]
         public async Task<IActionResult> CreateAccount([FromBody] CreateBedrijfRequestData request)
         {
-            var user = new Gebruiker { UserName = request.GebruikersNaam, Email = request.Email };
-            var result = await _userManager.CreateAsync(user, request.Wachtwoord);
+            // Controleer of de rol 'Bedrijf' bestaat, zo niet, maak de rol aan
+            var bedrijfRolExist = await _roleManager.RoleExistsAsync(Rol.Bedrijf);
+            if (!bedrijfRolExist)
+            {
+                await _roleManager.CreateAsync(new Rol { Name = Rol.Bedrijf });
+            }
 
-            return result.Succeeded ? CreatedAtAction(nameof(CreateAccount), user) : BadRequest(result.Errors);
+            var user = new Gebruiker
+            {
+                UserName = request.GebruikersNaam,
+                Email = request.Email,
+                Discriminator = Rol.Bedrijf
+            };
+
+            var resultCreateUser = await _userManager.CreateAsync(user, request.Wachtwoord);
+
+            if (resultCreateUser.Succeeded)
+            {
+                // Wijs de rol 'Bedrijf' toe aan de gebruiker van het bedrijf
+                var resultAddToRole = await _userManager.AddToRoleAsync(user, "Bedrijf");
+
+                if (resultAddToRole.Succeeded)
+                {
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    return CreatedAtAction(nameof(CreateAccount), user);
+                }
+                else
+                {
+                    return BadRequest(resultAddToRole.Errors);
+                }
+            }
+
+            return BadRequest(resultCreateUser.Errors);
         }
+
 
         public class CreateBedrijfRequestData
         {

@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\HP\\OneDrive\\Bureaublad\\WPR\\backend\\backend.csproj": {}
+    "C:\\Users\\yassi\\Desktop\\School\\WPR\\backend\\backend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\HP\\OneDrive\\Bureaublad\\WPR\\backend\\backend.csproj": {
+    "C:\\Users\\yassi\\Desktop\\School\\WPR\\backend\\backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\HP\\OneDrive\\Bureaublad\\WPR\\backend\\backend.csproj",
+        "projectUniqueName": "C:\\Users\\yassi\\Desktop\\School\\WPR\\backend\\backend.csproj",
         "projectName": "backend",
-        "projectPath": "C:\\Users\\HP\\OneDrive\\Bureaublad\\WPR\\backend\\backend.csproj",
-        "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\HP\\OneDrive\\Bureaublad\\WPR\\backend\\obj\\",
+        "projectPath": "C:\\Users\\yassi\\Desktop\\School\\WPR\\backend\\backend.csproj",
+        "packagesPath": "C:\\Users\\yassi\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\yassi\\Desktop\\School\\WPR\\backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\HP\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\yassi\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
@@ -43,6 +43,10 @@
               "version": "[1.64.0, )"
             },
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[6.0.0, )"
             },
@@ -80,6 +84,18 @@
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
+              "version": "[6.2.3, )"
+            },
+            "Swashbuckle.AspNetCore.Swagger": {
+              "target": "Package",
+              "version": "[6.5.0, )"
+            },
+            "Swashbuckle.AspNetCore.SwaggerGen": {
+              "target": "Package",
+              "version": "[6.5.0, )"
+            },
+            "Swashbuckle.AspNetCore.SwaggerUI": {
+              "target": "Package",
               "version": "[6.5.0, )"
             },
             "System.Data.SqlClient": {
@@ -106,7 +122,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.418\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.404\\RuntimeIdentifierGraph.json"
         }
       }
     }

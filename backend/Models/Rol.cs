@@ -1,4 +1,9 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Threading.Tasks;
 
 namespace Models
 {
@@ -8,5 +13,6 @@ namespace Models
         public const string Bedrijf = "Bedrijf";
         public const string Ervaringsdeskundige = "Ervaringsdeskundige";
         public const string Verzorger = "Verzorger";
+
     }
 }

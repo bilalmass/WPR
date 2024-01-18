@@ -48,20 +48,9 @@ const Bedrijfportalonderzoek = () => {
                             />
                         </label>
                         <br />
-
+                        
                         <label>
-                            Korte beschrijving:
-                            <textarea
-                                name="shortDescription"
-                                value={formData.shortDescription}
-                                onChange={handleChange}
-                                required
-                            ></textarea>
-                        </label>
-                        <br />
-
-                        <label>
-                            Volledige beschrijving:
+                             Beschrijving:
                             <textarea
                                 name="fullDescription"
                                 value={formData.fullDescription}

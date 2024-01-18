@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Models;
 
-public class DbContext : IdentityDbContext<Gebruiker, Rol, string>
+public class DbContext : IdentityDbContext<Gebruiker, Rol, int>
 {
     public DbContext(DbContextOptions<DbContext> options)
        : base(options)

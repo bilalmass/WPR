@@ -1,14 +1,30 @@
-﻿import React, { useState } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import Navbar from './Navbar';
 import { Link } from 'react-router-dom';
 import './componentstyling/userview.css';
-import userDummyData from './dummydata/userdummy';
 
 const UserPortal = () => {
-    const users = userDummyData;
-    const [genderFilter, setGenderFilter] = useState(''); 
-    const [minAgeFilter, setMinAgeFilter] = useState(''); 
+    const [users, setUsers] = useState([]);
+    const [genderFilter, setGenderFilter] = useState('');
+    const [minAgeFilter, setMinAgeFilter] = useState('');
     const [maxAgeFilter, setMaxAgeFilter] = useState('');
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                // Voer hier de Swagger-fetching logica in
+                // Vervang de onderstaande URL door de werkelijke Swagger API-endpoint
+                const response = await fetch('https://api.example.com/users');
+                const data = await response.json();
+
+                setUsers(data);
+            } catch (error) {
+                console.error('Fout bij het ophalen van gegevens:', error);
+            }
+        };
+
+        fetchData();
+    }, []); 
 
     const filterUsers = () => {
         let filteredUsers = users;

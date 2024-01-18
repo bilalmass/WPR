@@ -1,11 +1,28 @@
-﻿import React from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import Navbar from './Navbar';
 import './componentstyling/beheerderpage.css';
-import dummydata from './dummydata/onderzoekendummy'
 import { Link } from 'react-router-dom';
 
 const BeheerderOnderzoekview = () => {
-    const onderzoeken = dummydata;
+    const [onderzoeken, setOnderzoeken] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                // Voer hier de Swagger-fetching logica in
+                // Vervang de onderstaande URL door de werkelijke Swagger API-endpoint
+                const response = await fetch('https://api.example.com/onderzoeken');
+                const data = await response.json();
+
+                setOnderzoeken(data);
+            } catch (error) {
+                console.error('Fout bij het ophalen van gegevens:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
     const OnderzoekenList = ({ onderzoeken }) => {
         return (
             <div className="onderzoeken-lijst">
@@ -27,7 +44,6 @@ const BeheerderOnderzoekview = () => {
             </div>
         );
     };
-
 
     return (
         <>

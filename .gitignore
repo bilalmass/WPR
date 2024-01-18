@@ -10,3 +10,5 @@ backend/obj/project.assets.json
 backend/obj/Debug/net6.0/backend.assets.cache
 backend/obj/Debug/net6.0/backend.GeneratedMSBuildEditorConfig.editorconfig
 backend/obj/Debug/net6.0/backend.assets.cache
+backend/bin/Debug/net6.0/backend.dll
+backend/bin/Debug/net6.0/backend.dll

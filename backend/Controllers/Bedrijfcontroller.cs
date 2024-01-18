@@ -46,7 +46,7 @@ namespace AccessibilityApi.Controllers
 
         // GET: /bedrijf/onderzoeken
         [HttpGet("onderzoeken")]
-        public async Task<IActionResult> OnderzoekenOverzichtAsync([FromBody] string bedrijfId)
+        public async Task<IActionResult> OnderzoekenOverzichtAsync([FromBody] int bedrijfId)
         {
             var bedrijfOnderzoeken = await _dbContext.Onderzoeken
                 .Where(o => o.Bedrijf.GebruikerId == bedrijfId)
@@ -61,7 +61,7 @@ namespace AccessibilityApi.Controllers
 
         // GET: /bedrijf/onderzoeken/{onderzoekId}
         [HttpGet("onderzoeken/{onderzoekId}")]
-        public async Task<IActionResult> OnderzoekDetailsAsync([FromBody] string onderzoekId)
+        public async Task<IActionResult> OnderzoekDetailsAsync([FromBody] int onderzoekId)
         {
             var onderzoek = await _dbContext.Onderzoeken
                 .FirstOrDefaultAsync(o => o.OnderzoekId == onderzoekId);
@@ -85,7 +85,7 @@ namespace AccessibilityApi.Controllers
 
         // PUT: /bedrijf/onderzoeken/{onderzoekId}/bewerken
         [HttpPut("onderzoeken/{onderzoekId}/bewerken")]
-        public async Task<IActionResult> OnderzoekBijwerkenAsync(string onderzoekId, [FromBody] Onderzoek bijgewerktOnderzoek)
+        public async Task<IActionResult> OnderzoekBijwerkenAsync(int onderzoekId, [FromBody] Onderzoek bijgewerktOnderzoek)
         {
             var onderzoek = await _dbContext.Onderzoeken
                 .FirstOrDefaultAsync(o => o.OnderzoekId == onderzoekId);
@@ -102,7 +102,7 @@ namespace AccessibilityApi.Controllers
 
         // DELETE: /bedrijf/onderzoeken/{onderzoekId}/verwijderen
         [HttpDelete("onderzoeken/{onderzoekId}/verwijderen")]
-        public async Task<IActionResult> OnderzoekVerwijderenAsync([FromBody] string onderzoekId)
+        public async Task<IActionResult> OnderzoekVerwijderenAsync([FromBody] int onderzoekId)
         {
             var onderzoek = await _dbContext.Onderzoeken
                 .FirstOrDefaultAsync(o => o.OnderzoekId == onderzoekId);
@@ -127,7 +127,7 @@ namespace AccessibilityApi.Controllers
 
         // GET: /bedrijf/deelnemer/{deelnemerId}/profiel
         [HttpGet("deelnemer/{deelnemerId}/profiel")]
-        public async Task<IActionResult> BekijkProfielDeelnemerAsync([FromBody] string deelnemerId)
+        public async Task<IActionResult> BekijkProfielDeelnemerAsync([FromBody] int deelnemerId)
         {
             var deelnemer = await _dbContext.DeelnemersOnderzoek.FirstOrDefaultAsync(d => d.Ervaringsdeskundige.GebruikerId == deelnemerId);
 

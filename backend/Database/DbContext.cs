@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Models;
 
-public class DbContext : IdentityDbContext
+public class DbContext : IdentityDbContext<Gebruiker, Rol, int>
 {
     public DbContext(DbContextOptions<DbContext> options)
        : base(options)
@@ -22,7 +22,6 @@ public class DbContext : IdentityDbContext
     public DbSet<Chat>? Chats { get; set; }
     public DbSet<Ervaringsdeskundige>? Ervaringsdeskundigen { get; set; }
     public DbSet<Gebruiker>? Gebruikers { get; set; }
-    public DbSet<GebruikerRol>? GebruikerRollen { get; set; }
     public DbSet<Onderzoek>? Onderzoeken { get; set; }
     public DbSet<Rol>? Rollen { get; set; }
     public DbSet<Verzorger>? Verzorgers { get; set; }
@@ -34,11 +33,19 @@ public class DbContext : IdentityDbContext
         base.OnModelCreating(modelBuilder);
 
         // modelBuilder.Entity<Gebruiker>()
-        //     .HasDiscriminator<string>("UserType")
-        //     .HasValue<Gebruiker>("Gebruiker")
-        //     .HasValue<Ervaringsdeskundige>("Ervaringsdeskundige")
-        //     .HasValue<Verzorger>("Verzorger")
-        //     .HasValue<Bedrijf>("Bedrijf");
+        //     .Property(u => u.Discriminator)
+        //     .HasDefaultValue("Gebruiker");
+
+        modelBuilder.Entity<Gebruiker>()
+        .Property(u => u.Discriminator)
+        .HasDefaultValue("test");
+        
+        modelBuilder.Entity<Gebruiker>()
+            .HasDiscriminator<string>("UserType")
+            .HasValue<Gebruiker>("Gebruiker")
+            .HasValue<Ervaringsdeskundige>("Ervaringsdeskundige")
+            .HasValue<Verzorger>("Verzorger")
+            .HasValue<Bedrijf>("Bedrijf");
 
         // modelBuilder.Entity<GebruikerRol>()
         //     .HasOne(ur => ur.Rol)

@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 using Models;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
 
 namespace Controller
 {
@@ -11,35 +12,59 @@ namespace Controller
     {
         private readonly SignInManager<Gebruiker> _signInManager;
         private readonly UserManager<Gebruiker> _userManager;
-        private readonly DbContext _context;
 
-        public RegistreerBeheerderController(SignInManager<Gebruiker> signInManager, UserManager<Gebruiker> userManager, DbContext context)
+        private readonly RoleManager<Rol> _roleManager;
+
+        public RegistreerBeheerderController(
+            SignInManager<Gebruiker> signInManager,
+            UserManager<Gebruiker> userManager,
+            RoleManager<Rol> roleManager)
         {
             _signInManager = signInManager;
             _userManager = userManager;
-            _context = context;
+            _roleManager = roleManager;
+
         }
 
         [HttpPost]
         [Route("BeheerderRegistreer")]
         public async Task<IActionResult> CreateAccount([FromBody] CreateBeheerderRequestData request)
         {
-            var user = new Gebruiker { UserName = request.GebruikersNaam, Email = request.Email };
-            var result = await _userManager.CreateAsync(user, request.Wachtwoord);
-
-            if (result.Succeeded)
+            // Controleer of de rol 'Beheerder' bestaat, zo niet, maak de rol aan
+            var beheerderRolExist = await _roleManager.RoleExistsAsync(Rol.Beheerder);
+            if (!beheerderRolExist)
             {
-                // Voeg de gebruiker toe aan de "Beheerder"-rol
-                await _userManager.AddToRoleAsync(user, Rol.Beheerder);
-
-                // Optioneel: Inloggen na registratie
-                await _signInManager.SignInAsync(user, isPersistent: false);
-
-                return CreatedAtAction(nameof(CreateAccount), user);
+                await _roleManager.CreateAsync(new Rol { Name = Rol.Beheerder });
             }
 
-            return BadRequest(result.Errors);
+            var user = new Gebruiker
+            {
+                UserName = request.GebruikersNaam,
+                Email = request.Email,
+                Discriminator = Rol.Beheerder
+            };
+
+            var resultCreateUser = await _userManager.CreateAsync(user, request.Wachtwoord);
+
+            if (resultCreateUser.Succeeded)
+            {
+                // Wijs de rol 'Beheerder' toe aan de gebruiker van het Beheerder
+                var resultAddToRole = await _userManager.AddToRoleAsync(user, "Beheerder");
+
+                if (resultAddToRole.Succeeded)
+                {
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    return CreatedAtAction(nameof(CreateAccount), user);
+                }
+                else
+                {
+                    return BadRequest(resultAddToRole.Errors);
+                }
+            }
+
+            return BadRequest(resultCreateUser.Errors);
         }
+
 
         public class CreateBeheerderRequestData
         {

@@ -1,17 +1,16 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Models;
 
-namespace Controllers
+namespace Controller
 {
     [Route("[controller]")]
     [ApiController]
     public class OnderzoekController : ControllerBase
     {
         private readonly DbContext _dbContext;
-
+        
         public OnderzoekController(DbContext dbContext)
         {
             _dbContext = dbContext;

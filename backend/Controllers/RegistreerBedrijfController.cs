@@ -22,6 +22,7 @@ namespace Controller
             _signInManager = signInManager;
             _userManager = userManager;
             _roleManager = roleManager;
+
         }
 
         [HttpPost]

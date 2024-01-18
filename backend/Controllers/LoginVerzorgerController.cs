@@ -19,7 +19,7 @@ namespace Controller
         }
 
         [HttpPost]
-        [Route("VerzorgerLogin")]
+        [Route("VerzorgerLogin  ")]
         public async Task<IActionResult> Login([FromBody] VerzorgerLoginRequestData request)
         {
             var result = await _signInManager.PasswordSignInAsync(request.GebruikersNaam, request.Wachtwoord, false, lockoutOnFailure: false);

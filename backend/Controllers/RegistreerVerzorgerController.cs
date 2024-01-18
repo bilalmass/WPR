@@ -12,6 +12,7 @@ namespace Controller
     {
         private readonly SignInManager<Gebruiker> _signInManager;
         private readonly UserManager<Gebruiker> _userManager;
+
         private readonly RoleManager<Rol> _roleManager;
 
         public RegistreerVerzorgerController(
@@ -22,6 +23,7 @@ namespace Controller
             _signInManager = signInManager;
             _userManager = userManager;
             _roleManager = roleManager;
+
         }
 
         [HttpPost]

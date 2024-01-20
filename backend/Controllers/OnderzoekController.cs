@@ -49,7 +49,7 @@ public class OnderzoekController : ControllerBase
         await _context.Onderzoeken.AddAsync(v);
         await _context.SaveChangesAsync();
         
-        return CreatedAtAction(request.Titel, new { id = v.OnderzoekId }, request);
+        return CreatedAtAction("GetOnderzoek", new { id = v.OnderzoekId }, request);
         //  return await result.Succeeded ? new BadRequestObjectResult(result) : StatusCode(201);
     }
 }

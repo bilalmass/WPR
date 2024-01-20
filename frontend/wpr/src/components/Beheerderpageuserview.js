@@ -8,6 +8,7 @@ const UserPortal = () => {
     const [genderFilter, setGenderFilter] = useState('');
     const [minAgeFilter, setMinAgeFilter] = useState('');
     const [maxAgeFilter, setMaxAgeFilter] = useState('');
+    const [discriminatorFilter, setDiscriminatorFilter] = useState('');
 
     useEffect(() => {
         const fetchData = async () => {
@@ -27,17 +28,17 @@ const UserPortal = () => {
 
                 data = data.map(user => {
                     const parts = user.geboortedatum.split('-');
-                    const dob = new Date(parts[2], parts[1] - 1, parts[0]);
+                    const datum = new Date(parts[2], parts[1] - 1, parts[0]);
                     const today = new Date();
-                    let age = today.getFullYear() - dob.getFullYear();
-                    const monthDiff = today.getMonth() - dob.getMonth();
-                    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+                    let age = today.getFullYear() - datum.getFullYear();
+                    const monthDiff = today.getMonth() - datum.getMonth();
+                    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < datum.getDate())) {
                         age--;
                     }
                     return { ...user, age };
                 });
 
-                if (genderFilter !== '' || minAgeFilter !== '' || maxAgeFilter !== '') {
+                if (genderFilter !== '' || minAgeFilter !== '' || maxAgeFilter !== '' || discriminatorFilter !== '') {
                     data = data.filter(user => {
                         if (genderFilter !== '' && user.geslacht !== genderFilter) {
                             return false;
@@ -46,6 +47,9 @@ const UserPortal = () => {
                             return false;
                         }
                         if (maxAgeFilter !== '' && user.age > parseInt(maxAgeFilter)) {
+                            return false;
+                        }
+                        if (discriminatorFilter !== '' && user.discriminator !== discriminatorFilter) {
                             return false;
                         }
                         return true;
@@ -59,7 +63,7 @@ const UserPortal = () => {
         };
 
         fetchData();
-    }, [genderFilter, minAgeFilter, maxAgeFilter]);
+    }, [genderFilter, minAgeFilter, maxAgeFilter, discriminatorFilter]);
 
     const UsersList = ({ users }) => {
         return (
@@ -115,6 +119,14 @@ const UserPortal = () => {
                             value={maxAgeFilter}
                             onChange={(e) => setMaxAgeFilter(e.target.value)}
                         />
+                    </label>
+                    <label>
+                        Type:
+                        <select value={discriminatorFilter} onChange={(e) => setDiscriminatorFilter(e.target.value)}>
+                            <option value="">All</option>
+                            <option value="User">User</option>
+                            <option value="Bedrijf">Bedrijf</option>
+                        </select>
                     </label>
                 </div>
                 <UsersList users={users} />

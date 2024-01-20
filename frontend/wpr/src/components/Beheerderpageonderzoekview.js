@@ -9,11 +9,8 @@ const BeheerderOnderzoekview = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // Voer hier de Swagger-fetching logica in
-                // Vervang de onderstaande URL door de werkelijke Swagger API-endpoint
-                const response = await fetch('https://api.example.com/onderzoeken');
+                const response = await fetch('https://localhost:7211/Onderzoek/getall');
                 const data = await response.json();
-
                 setOnderzoeken(data);
             } catch (error) {
                 console.error('Fout bij het ophalen van gegevens:', error);
@@ -22,6 +19,44 @@ const BeheerderOnderzoekview = () => {
 
         fetchData();
     }, []);
+    const updateOnderzoek = async (id) => {
+        const response = await fetch(`https://localhost:7211/Onderzoek/update/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Accept': '*/*',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                status: "Gesloten"
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        } else {
+            const data = await response.json();
+            console.log(data.message);
+        }
+    }
+    const openOnderzoek = async (id) => {
+        const response = await fetch(`https://localhost:7211/Onderzoek/open/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Accept': '*/*',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                status: "Open"
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        } else {
+            const data = await response.json();
+            console.log(data.message);
+        }
+    }
 
     const OnderzoekenList = ({ onderzoeken }) => {
         return (
@@ -31,13 +66,20 @@ const BeheerderOnderzoekview = () => {
                     {onderzoeken.map((onderzoek) => (
                         <li key={onderzoek.id}>
                             <strong>{onderzoek.titel}</strong>
-                            <p>{onderzoek.beschrijving}</p>
-                            <p>Uitvoerder: {onderzoek.uitvoerder}</p>
-                            <p>Datum: {onderzoek.datum}</p>
-                            <p>Locatie: {onderzoek.locatie}</p>
-                            <p>Beloning: {onderzoek.beloning}</p>
-                            <p>Type: {onderzoek.type}</p>
-                            <p>Status: {onderzoek.status}</p>
+                            {onderzoek.beschrijving && <p>{onderzoek.beschrijving}</p>}
+                            {onderzoek.uitvoerder && <p>Uitvoerder: {onderzoek.uitvoerder}</p>}
+                            {onderzoek.datum && <p>Datum: {onderzoek.datum}</p>}
+                            {onderzoek.locatie && <p>Locatie: {onderzoek.locatie}</p>}
+                            {onderzoek.beloning && <p>Beloning: {onderzoek.beloning}</p>}
+                            {onderzoek.categorie && <p>Type: {onderzoek.categorie}</p>}
+                            {onderzoek.status && <p>Status: {onderzoek.status}</p>}
+                            <button
+                                onClick={() => onderzoek.status === "Gesloten" ? openOnderzoek(onderzoek.onderzoekId) : updateOnderzoek(onderzoek.onderzoekId)}
+                                style={{ backgroundColor: onderzoek.status === "Gesloten" ? "green" : "red" }}
+                            >
+                                {onderzoek.status === "Gesloten" ? "Open dit onderzoek" : "Sluit dit onderzoek"}
+                            </button>
+
                         </li>
                     ))}
                 </ul>

@@ -38,7 +38,43 @@ public class OnderzoekController : ControllerBase
     {
         return await _context.Onderzoeken.ToListAsync();
     }
+    [HttpPut]
+    [Route("update/{id}")]
+    public async Task<IActionResult> SluitOnderzoek(int id, [FromBody] UpdateOnderzoekRequestData request)
+    {
+        var onderzoek = await _context.Onderzoeken.FindAsync(id);
+        if (onderzoek == null)
+        {
+            return NotFound();
+        }
 
+        onderzoek.Status = "Gesloten";
+
+        await _context.SaveChangesAsync();
+
+        return Ok(new { message = "Onderzoek bijgewerkt" });
+    }
+    [HttpPut]
+    [Route("open/{id}")]
+    public async Task<IActionResult> OpenOnderzoek(int id, [FromBody] UpdateOnderzoekRequestData request)
+    {
+        var onderzoek = await _context.Onderzoeken.FindAsync(id);
+        if (onderzoek == null)
+        {
+            return NotFound();
+        }
+
+        onderzoek.Status = "Open";
+
+        await _context.SaveChangesAsync();
+
+        return Ok(new { message = "Onderzoek bijgewerkt" });
+    }
+
+    public class UpdateOnderzoekRequestData
+    {
+        public string Status { get; set; }
+    }
     [HttpPost]
     [Route("create")]
     public async Task<IActionResult> CreateOnderzoek([FromBody] CreateOnderzoekRequestData request)

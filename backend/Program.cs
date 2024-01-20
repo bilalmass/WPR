@@ -9,6 +9,16 @@ using System.Threading.Tasks;
 using Models; // Ga ervan uit dat je modelklassen zich in een namespace genaamd 'Models' bevinden
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowMyOrigin",
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:3000", "http://localhost","http://localhost:3001")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
 
 // Laad configuratie uit verschillende bronnen
 builder.Configuration.AddJsonFile("appsettings.json");
@@ -66,6 +76,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
+
+app.UseCors("AllowMyOrigin");
 
 app.MapControllers();
 

@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-
+using System.Linq;
+using Models;
 
 namespace Controller
 {
     [Route("[controller]")]
     [ApiController]
-    
     public class GebruikerController : ControllerBase
     {
         private readonly DbContext _dbContext;
@@ -18,16 +19,12 @@ namespace Controller
 
         [HttpGet]
         [Route("lijst")]
-        public IActionResult Index()
+
+        public List<Gebruiker> GetGebruikers()
         {
-            var gebruikers = _dbContext.Gebruikers
-                .Include(o => o.UserName)
-                .Include(o => o.GebruikerId)
-                .Include(o => o.PhoneNumber)
-                .ToList();
+            List<Gebruiker> gebruikers = _dbContext.Gebruikers.ToList();
 
-
-            return Ok(gebruikers);
+            return gebruikers;
         }
     }
 }

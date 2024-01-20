@@ -12,39 +12,52 @@ const UserPortal = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // Voer hier de Swagger-fetching logica in
-                // Vervang de onderstaande URL door de werkelijke Swagger API-endpoint
-                const response = await fetch('https://api.example.com/users');
-                const data = await response.json();
+                const response = await fetch(`https://localhost:7211/Gebruiker/lijst`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Fout bij het ophalen van gegevens: ${response.statusText}`);
+                }
+
+                let data = await response.json();
+
+                // Calculate age for each user
+                data = data.map(user => {
+                    const dob = new Date(user.geboortedatum);
+                    const today = new Date();
+                    const age = today.getFullYear() - dob.getFullYear();
+                    return { ...user, age };
+                });
+
+                // Filter users based on gender and age
+                if (genderFilter !== '' || minAgeFilter !== '' || maxAgeFilter !== '') {
+                    data = data.filter(user => {
+                        if (genderFilter !== '' && user.geslacht !== genderFilter) {
+                            return false;
+                        }
+                        if (minAgeFilter !== '' && user.age < parseInt(minAgeFilter)) {
+                            return false;
+                        }
+                        if (maxAgeFilter !== '' && user.age > parseInt(maxAgeFilter)) {
+                            return false;
+                        }
+                        return true;
+                    });
+                }
 
                 setUsers(data);
             } catch (error) {
-                console.error('Fout bij het ophalen van gegevens:', error);
+                console.error('Fout bij het ophalen van gegevens:', error.message);
             }
         };
 
+
         fetchData();
-    }, []); 
-
-    const filterUsers = () => {
-        let filteredUsers = users;
-
-        if (genderFilter) {
-            filteredUsers = filteredUsers.filter(user => user.gender === genderFilter);
-        }
-
-        if (minAgeFilter && maxAgeFilter) {
-            const currentYear = new Date().getFullYear();
-            filteredUsers = filteredUsers.filter(
-                user => {
-                    const age = currentYear - new Date(user.birthDate).getFullYear();
-                    return age >= parseInt(minAgeFilter) && age <= parseInt(maxAgeFilter);
-                }
-            );
-        }
-
-        return filteredUsers;
-    };
+    }, [genderFilter]);
 
     const UsersList = ({ users }) => {
         return (
@@ -55,9 +68,12 @@ const UserPortal = () => {
                         <li key={user.id}>
                             <strong>{user.firstName} {user.lastName}</strong>
                             <p>Email: {user.email}</p>
+                            <p>Voornaam: {user.voornaam}</p>
+                            <p>Achternaam: {user.achternaam}</p>
                             <p>Telefoonnummer: {user.phoneNumber}</p>
-                            <p>Geslacht: {user.gender}</p>
-                            <p>Geboortedatum: {user.birthDate}</p>
+                            <p>Geslacht: {user.geslacht}</p>
+                            <p>Soort: {user.discriminator}</p>
+                            <p>Geboortedatum: {user.geboortedatum}</p>
                         </li>
                     ))}
                 </ul>
@@ -75,8 +91,8 @@ const UserPortal = () => {
                         Geslacht:
                         <select value={genderFilter} onChange={(e) => setGenderFilter(e.target.value)}>
                             <option value="">Alle</option>
-                            <option value="man">Man</option>
-                            <option value="vrouw">Vrouw</option>
+                            <option value="Man">Man</option>
+                            <option value="Vrouw">Vrouw</option>
                             <option value="wil ik liever niet zeggen">N.v.t.</option>
                         </select>
                     </label>
@@ -99,7 +115,7 @@ const UserPortal = () => {
                         />
                     </label>
                 </div>
-                <UsersList users={filterUsers()} />
+                <UsersList users={users} />
             </div>
         </>
     );

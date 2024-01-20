@@ -10,12 +10,9 @@ const Casussen = () => {
     const [onderzoekenData, setOnderzoekenData] = useState([]);
 
     useEffect(() => {
-// Functie voor het ophalen van onderzoeken met Swagger
         const fetchOnderzoekenData = async () => {
             try {
-                // Voer hier de Swagger-fetching logica in voor onderzoeken
-                // Vervang de onderstaande URL door de werkelijke Swagger API-endpoint
-                const onderzoekenResponse = await fetch('https://api.example.com/onderzoeken');
+                const onderzoekenResponse = await fetch('https://localhost:7211/Onderzoek/getall');
                 const onderzoekenData = await onderzoekenResponse.json();
 
                 setOnderzoekenData(onderzoekenData);
@@ -44,7 +41,7 @@ const Casussen = () => {
             <div className="casussen-container">
                 {casussenData.map((casus) => (
                     <div key={casus.id} className="casus-card">
-                        <h1>{casus.type}</h1>
+                        <h1>{casus.categorie}</h1>
                         <h2>{casus.titel}</h2>
                         <p>{casus.beschrijving}</p>
                         <button className={"button"} onClick={() => handleInschrijvenClick(casus)}>Inschrijven</button>
@@ -53,7 +50,7 @@ const Casussen = () => {
 
                 {onderzoekenData.map((onderzoek) => (
                     <div key={onderzoek.id} className="casus-card">
-                        <h1>{onderzoek.type}</h1>
+                        <h1>{onderzoek.categorie}</h1>
                         <h2>{onderzoek.titel}</h2>
                         <p>{onderzoek.beschrijving}</p>
                         <button className={"button"} onClick={() => handleInschrijvenClick(onderzoek)}>Inschrijven</button>
@@ -70,6 +67,8 @@ const Casussen = () => {
                         <h1>{selectedCasus.type}</h1>
                         <h2>{selectedCasus.titel}</h2>
                         <p>{selectedCasus.beschrijving}</p>
+                        <p>{selectedCasus.beloning}</p>
+                        <p>{selectedCasus.start}</p>
                         <button>Inschrijven</button>
                     </div>
                 </div>

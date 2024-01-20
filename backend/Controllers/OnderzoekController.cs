@@ -32,6 +32,12 @@ public class OnderzoekController : ControllerBase
     {
         return await _context.Onderzoeken.OrderBy(p => p.Titel).ToListAsync(); // Titel veranderen naar Populariteit
     }
+    [HttpGet]
+    [Route("getall")]
+    public async Task<ActionResult<IEnumerable<Onderzoek>>> GetAllOnderzoeken()
+    {
+        return await _context.Onderzoeken.ToListAsync();
+    }
 
     [HttpPost]
     [Route("create")]

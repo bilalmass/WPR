@@ -25,15 +25,18 @@ const UserPortal = () => {
 
                 let data = await response.json();
 
-                // Calculate age for each user
                 data = data.map(user => {
-                    const dob = new Date(user.geboortedatum);
+                    const parts = user.geboortedatum.split('-');
+                    const dob = new Date(parts[2], parts[1] - 1, parts[0]);
                     const today = new Date();
-                    const age = today.getFullYear() - dob.getFullYear();
+                    let age = today.getFullYear() - dob.getFullYear();
+                    const monthDiff = today.getMonth() - dob.getMonth();
+                    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+                        age--;
+                    }
                     return { ...user, age };
                 });
 
-                // Filter users based on gender and age
                 if (genderFilter !== '' || minAgeFilter !== '' || maxAgeFilter !== '') {
                     data = data.filter(user => {
                         if (genderFilter !== '' && user.geslacht !== genderFilter) {
@@ -55,9 +58,8 @@ const UserPortal = () => {
             }
         };
 
-
         fetchData();
-    }, [genderFilter]);
+    }, [genderFilter, minAgeFilter, maxAgeFilter]);
 
     const UsersList = ({ users }) => {
         return (

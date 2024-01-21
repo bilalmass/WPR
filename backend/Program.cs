@@ -11,14 +11,15 @@ using Models; // Ga ervan uit dat je modelklassen zich in een namespace genaamd 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowMyOrigin",
+    options.AddPolicy("AllowAllOrigins",
         builder =>
         {
-            builder.WithOrigins("http://localhost:3000", "http://localhost","http://localhost:3001")
+            builder.AllowAnyOrigin()
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });
 });
+
 
 // Laad configuratie uit verschillende bronnen
 builder.Configuration.AddJsonFile("appsettings.json");
@@ -77,7 +78,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 
-app.UseCors("AllowMyOrigin");
+app.UseCors("AllowAllOrigins");
 
 app.MapControllers();
 

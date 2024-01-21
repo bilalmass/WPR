@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
@@ -8,18 +9,18 @@ namespace AccessibilityApi.Controllers
     [ApiController]
     public class BedrijfsController : ControllerBase
     {
-        private readonly DbContext _dbContext;
+        private readonly DbContext _context;
 
         public BedrijfsController(DbContext dbContext)
         {
-            _dbContext = dbContext;
+            _context = dbContext;
         }
 
         // GET: /bedrijf/profiel
         [HttpGet("profiel")]
         public async Task<IActionResult> ProfielAsync()
         {
-            var bedrijfsProfiel = await _dbContext.Bedrijven.FirstOrDefaultAsync();
+            var bedrijfsProfiel = await _context.Bedrijven.FirstOrDefaultAsync();
             if (bedrijfsProfiel == null)
             {
                 return NotFound("Bedrijfsprofiel niet gevonden");
@@ -28,27 +29,54 @@ namespace AccessibilityApi.Controllers
         }
 
         // POST: /bedrijf/profiel/update
-        [HttpPut("bedrijfprofiel/update")]
-        public async Task<IActionResult> UpdateProfielAsync([FromBody] Bedrijf updatedBedrijf)
+        // [HttpPut("bedrijfprofiel/update")]
+        // public async Task<IActionResult> UpdateProfielAsync([FromBody] Bedrijf updatedBedrijf)
+        // {
+        //     var bedrijf = await _context.Bedrijven.FirstOrDefaultAsync();
+        //     if (bedrijf == null)
+        //     {
+        //         return NotFound("Bedrijven niet gevonden");
+        //     }
+
+        //     bedrijf.Naam = updatedBedrijf.Naam;
+
+        //     await _context.SaveChangesAsync();
+
+        //     return Ok("Bedrijfsprofiel succesvol bijgewerkt");
+        // }
+
+        [Authorize(Roles = "BedrijfRole")]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateBedrijfProfile(int id, [FromBody] BedrijfUpdateModel model)
         {
-            var bedrijf = await _dbContext.Bedrijven.FirstOrDefaultAsync();
+            var bedrijf = await _context.Bedrijven.FindAsync(id);
             if (bedrijf == null)
             {
-                return NotFound("Bedrijven niet gevonden");
+                return NotFound();
             }
 
-            bedrijf.Naam = updatedBedrijf.Naam;
+            if(model.Naam != null) bedrijf.Naam = model.Naam;
+            // ... andere properties?
 
-            await _dbContext.SaveChangesAsync();
+            _context.Bedrijven.Update(bedrijf);
+            await _context.SaveChangesAsync();
 
-            return Ok("Bedrijfsprofiel succesvol bijgewerkt");
+            return Ok(bedrijf); 
         }
+
+        // BedrijfUpdateModel.cs
+        public class BedrijfUpdateModel
+        {
+            public string? Naam { get; set; }
+            // andere properties?
+        }
+
 
         // GET: /bedrijf/onderzoeken
         [HttpGet("onderzoeken")]
         public async Task<IActionResult> OnderzoekenOverzichtAsync([FromBody] int bedrijfId)
         {
-            var bedrijfOnderzoeken = await _dbContext.Onderzoeken
+            var bedrijfOnderzoeken = await _context.Onderzoeken
                 .Where(o => o.Bedrijf.GebruikerId == bedrijfId)
                 .ToListAsync();
             if (!bedrijfOnderzoeken.Any())
@@ -57,13 +85,13 @@ namespace AccessibilityApi.Controllers
             }
 
             return Ok(bedrijfOnderzoeken);
-        }
+        }  
 
         // GET: /bedrijf/onderzoeken/{onderzoekId}
         [HttpGet("onderzoeken/{onderzoekId}")]
         public async Task<IActionResult> OnderzoekDetailsAsync([FromBody] int onderzoekId)
         {
-            var onderzoek = await _dbContext.Onderzoeken
+            var onderzoek = await _context.Onderzoeken
                 .FirstOrDefaultAsync(o => o.OnderzoekId == onderzoekId);
             if (onderzoek == null)
             {
@@ -77,8 +105,8 @@ namespace AccessibilityApi.Controllers
         [HttpPost("onderzoeken/nieuw")]
         public async Task<IActionResult> NieuwOnderzoekToevoegenAsync([FromBody] Onderzoek onderzoek)
         {
-            await _dbContext.Onderzoeken.AddAsync(onderzoek);
-            await _dbContext.SaveChangesAsync();
+            await _context.Onderzoeken.AddAsync(onderzoek);
+            await _context.SaveChangesAsync();
 
             return Ok("Nieuw onderzoek toegevoegd");
         }
@@ -87,7 +115,7 @@ namespace AccessibilityApi.Controllers
         [HttpPut("onderzoeken/{onderzoekId}/bewerken")]
         public async Task<IActionResult> OnderzoekBijwerkenAsync(int onderzoekId, [FromBody] Onderzoek bijgewerktOnderzoek)
         {
-            var onderzoek = await _dbContext.Onderzoeken
+            var onderzoek = await _context.Onderzoeken
                 .FirstOrDefaultAsync(o => o.OnderzoekId == onderzoekId);
             if (onderzoek == null)
             {
@@ -95,7 +123,7 @@ namespace AccessibilityApi.Controllers
             }
 
             onderzoek.Titel = bijgewerktOnderzoek.Titel;
-            await _dbContext.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             return Ok("Onderzoek succesvol bijgewerkt");
         }
@@ -104,15 +132,15 @@ namespace AccessibilityApi.Controllers
         [HttpDelete("onderzoeken/{onderzoekId}/verwijderen")]
         public async Task<IActionResult> OnderzoekVerwijderenAsync([FromBody] int onderzoekId)
         {
-            var onderzoek = await _dbContext.Onderzoeken
+            var onderzoek = await _context.Onderzoeken
                 .FirstOrDefaultAsync(o => o.OnderzoekId == onderzoekId);
             if (onderzoek == null)
             {
                 return NotFound("Onderzoek niet gevonden");
             }
 
-            _dbContext.Onderzoeken.Remove(onderzoek);
-            await _dbContext.SaveChangesAsync();
+            _context.Onderzoeken.Remove(onderzoek);
+            await _context.SaveChangesAsync();
 
             return Ok("Onderzoek succesvol verwijderd");
         }
@@ -129,7 +157,7 @@ namespace AccessibilityApi.Controllers
         [HttpGet("deelnemer/{deelnemerId}/profiel")]
         public async Task<IActionResult> BekijkProfielDeelnemerAsync([FromBody] int deelnemerId)
         {
-            var deelnemer = await _dbContext.DeelnemersOnderzoek.FirstOrDefaultAsync(d => d.Ervaringsdeskundige.GebruikerId == deelnemerId);
+            var deelnemer = await _context.DeelnemersOnderzoek.FirstOrDefaultAsync(d => d.Ervaringsdeskundige.GebruikerId == deelnemerId);
 
             if (deelnemer == null)
             {

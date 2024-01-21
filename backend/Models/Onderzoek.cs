@@ -13,5 +13,5 @@ public class Onderzoek
     public string? Type {get; set;}
     public Bedrijf? Bedrijf {get; set;}
 
-    public ICollection<ErvaringsdeskundigeOnderzoek>? Deelnemers {get; set;}
+    public ICollection<ErvaringsdeskundigeOnderzoek> Deelnemers {get; set;} = new List<ErvaringsdeskundigeOnderzoek>();
 }

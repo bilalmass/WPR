@@ -11,6 +11,9 @@ import BedrijfsRegister from './pages/BedrijfRegister'
 import Beheerderportal from './pages/Beheerderportal'
 import BeheerderportalUser from './pages/BeheerderUserView'
 import BeheerderportalOnderzoeken from './pages/BeheerderOnderzoekView'
+import Bedrijfportal from './pages/Bedrijfportal'
+import Bedrijfportalonderzoek from './pages/Bedrijfportalonderzoek'
+import Mijncasussen from './pages/Mijncasussen'
 
 
 export default function App() {
@@ -18,6 +21,7 @@ export default function App() {
 
     const handleLogout = () => {
         setLoggedIn(false);
+        
     };
 
     return (
@@ -47,6 +51,9 @@ export default function App() {
                     <Route path="/beheerderportal" element={<Beheerderportal />} />
                     <Route path="/beheerderportal/onderzoeken" element={<BeheerderportalOnderzoeken />} />
                     <Route path="/beheerderportal/gebruikers" element={<BeheerderportalUser />} />
+                    <Route path="/bedrijfportaal" element={<Bedrijfportal />} />
+                    <Route path="/bedrijfportaal/onderzoeken" element={<Bedrijfportalonderzoek />} />
+                    <Route path="/mijncasussen" element={<Mijncasussen />} />
 
                 </Routes>
             </BrowserRouter>

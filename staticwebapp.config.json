@@ -1,12 +1,10 @@
 ﻿{
-  "navigationFallback": [
-    {
-      "rewrite": "/mainpage.js",
-      "exclude": ["/images/*.{png,jpg,gif}", "/css/*"]
-    },
-    {
-      "rewrite": "/Casussen.js",
-      "exclude": ["/images/*.{png,jpg,gif}", "/css/*"]
-    }
-  ]
+  "navigationFallback": {
+    "rewrite": "index.html",
+    "exclude": ["/static/images/*.{png,jpg,gif}", "/static/css/*"]
+  },
+  "mimeTypes": {
+    ".json": "text/json"
+  }
 }
+`

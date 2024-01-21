@@ -15,21 +15,42 @@ const Login = () => {
         setShowKeuze(false);
     };
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
 
         const username = e.target.username.value;
         const password = e.target.password.value;
 
-        const user = userDummyData.find((user) => user.email === username && user.password === password);
+        try {
+            // Maak een HTTP-verzoek naar de Swagger API
+            const response = await fetch('/ErvaringsdeskundigeLogin/Login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    gebruikersNaam: username,
+                    wachtwoord: password,
+                }),
+            });
 
-        if (user) {
+            // Controleer of het verzoek succesvol was
+            if (response.ok) {
+                const data = await response.json();
 
-    //extra code als ieand inlogt
-            console.log('Ingelogd als:', user);
-            setLoginError('');
-        } else {
-            setLoginError('Ongeldige gebruikersnaam of wachtwoord');
+                // Controleer of de inloggegevens geldig zijn
+                if (data.success) {
+                    console.log('Ingelogd als:', data.user);
+                    setLoginError('');
+                } else {
+                    setLoginError('Ongeldige gebruikersnaam of wachtwoord');
+                }
+            } else {
+                setLoginError('Er is een fout opgetreden bij het inloggen');
+            }
+        } catch (error) {
+            console.error('Er is een fout opgetreden bij het verwerken van het inlogverzoek:', error);
+            setLoginError('Er is een fout opgetreden bij het inloggen');
         }
     };
 

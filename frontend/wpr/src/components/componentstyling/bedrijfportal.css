@@ -1,0 +1,24 @@
+﻿/* beheerderpage.css */
+
+.portal-button {
+    background-color: #2B50EC;
+    color: white; 
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.portal-button:hover {
+    background-color: #1d3b92;
+}
+
+.beheerder-portal {
+    text-align: center;
+    margin: 50px auto;
+}
+
+.beheerder-portal h1 {
+    color: black;
+}

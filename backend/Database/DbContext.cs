@@ -32,10 +32,6 @@ public class DbContext : IdentityDbContext<Gebruiker, Rol, int>
     {
         base.OnModelCreating(modelBuilder);
 
-        // modelBuilder.Entity<Gebruiker>()
-        //     .Property(u => u.Discriminator)
-        //     .HasDefaultValue("Gebruiker");
-
         modelBuilder.Entity<Gebruiker>()
         .Property(u => u.Discriminator)
         .HasDefaultValue("test");
@@ -47,33 +43,5 @@ public class DbContext : IdentityDbContext<Gebruiker, Rol, int>
             .HasValue<Verzorger>("Verzorger")
             .HasValue<Bedrijf>("Bedrijf");
 
-        // modelBuilder.Entity<GebruikerRol>()
-        //     .HasOne(ur => ur.Rol)
-        //     .WithMany(r => r.GebruikerRollen)
-        //     .HasForeignKey(ur => ur.RoleId)
-        //     .OnDelete(DeleteBehavior.Restrict);
-
-        // // Chat & Bericht relationship
-        // modelBuilder.Entity<Chat>()
-        //     .HasMany(c => c.Berichten)
-        //     .WithOne(b => b.Chat)
-        //     .HasForeignKey(b => b.Chat) // Make sure this uses the correct foreign key property
-        //     .OnDelete(DeleteBehavior.Restrict);
-
-        // // ErvaringsdeskundigeOnderzoek composite key and relationships
-        // modelBuilder.Entity<ErvaringsdeskundigeOnderzoek>()
-        //     .HasKey(eo => new { eo.ErvaringsdeskundigeId, eo.OnderzoekId });
-
-        // modelBuilder.Entity<ErvaringsdeskundigeOnderzoek>()
-        //     .HasOne(eo => eo.Ervaringsdeskundige)
-        //     .WithMany(e => e.Deelnames)
-        //     .HasForeignKey(eo => eo.ErvaringsdeskundigeId)
-        //     .OnDelete(DeleteBehavior.Restrict);
-
-        // modelBuilder.Entity<ErvaringsdeskundigeOnderzoek>()
-        //     .HasOne(eo => eo.Onderzoek)
-        //     .WithMany(o => o.Deelnemers)
-        //     .HasForeignKey(eo => eo.OnderzoekId)
-        //     .OnDelete(DeleteBehavior.Restrict);
     }
 }

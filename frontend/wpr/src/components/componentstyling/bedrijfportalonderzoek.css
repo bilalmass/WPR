@@ -1,0 +1,61 @@
+﻿/* componentstyling/bedrijfportalonderzoek.css */
+
+.beheerder-portal {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.portal-button {
+    background-color: #3498db;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.portal-button:hover {
+    background-color: #2980b9;
+}
+
+.onderzoek-form {
+    margin-top: 20px;
+}
+
+.onderzoek-form h2 {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+input[type="text"],
+input[type="date"],
+textarea,
+select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    background-color: #1CA883;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #1CA883;
+}

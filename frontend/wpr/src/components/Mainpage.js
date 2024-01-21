@@ -16,7 +16,7 @@ const Homepage = () => {
                 const data = await response.json();
 
                 if (data.articles) {
-                    setNewsArticles(data.articles.slice(1, 5));
+                    setNewsArticles(data.articles.slice(2, 6));
                 }
             } catch (error) {
                 console.error('Fout bij het ophalen van nieuws:', error);

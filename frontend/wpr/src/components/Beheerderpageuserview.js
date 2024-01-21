@@ -1,34 +1,69 @@
-﻿import React, { useState } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import Navbar from './Navbar';
 import { Link } from 'react-router-dom';
 import './componentstyling/userview.css';
-import userDummyData from './dummydata/userdummy';
 
 const UserPortal = () => {
-    const users = userDummyData;
-    const [genderFilter, setGenderFilter] = useState(''); 
-    const [minAgeFilter, setMinAgeFilter] = useState(''); 
+    const [users, setUsers] = useState([]);
+    const [genderFilter, setGenderFilter] = useState('');
+    const [minAgeFilter, setMinAgeFilter] = useState('');
     const [maxAgeFilter, setMaxAgeFilter] = useState('');
+    const [discriminatorFilter, setDiscriminatorFilter] = useState('');
 
-    const filterUsers = () => {
-        let filteredUsers = users;
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`https://localhost:7211/Gebruiker/lijst`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                    },
+                });
 
-        if (genderFilter) {
-            filteredUsers = filteredUsers.filter(user => user.gender === genderFilter);
-        }
-
-        if (minAgeFilter && maxAgeFilter) {
-            const currentYear = new Date().getFullYear();
-            filteredUsers = filteredUsers.filter(
-                user => {
-                    const age = currentYear - new Date(user.birthDate).getFullYear();
-                    return age >= parseInt(minAgeFilter) && age <= parseInt(maxAgeFilter);
+                if (!response.ok) {
+                    throw new Error(`Fout bij het ophalen van gegevens: ${response.statusText}`);
                 }
-            );
-        }
 
-        return filteredUsers;
-    };
+                let data = await response.json();
+
+                data = data.map(user => {
+                    const parts = user.geboortedatum.split('-');
+                    const datum = new Date(parts[2], parts[1] - 1, parts[0]);
+                    const today = new Date();
+                    let age = today.getFullYear() - datum.getFullYear();
+                    const monthDiff = today.getMonth() - datum.getMonth();
+                    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < datum.getDate())) {
+                        age--;
+                    }
+                    return { ...user, age };
+                });
+
+                if (genderFilter !== '' || minAgeFilter !== '' || maxAgeFilter !== '' || discriminatorFilter !== '') {
+                    data = data.filter(user => {
+                        if (genderFilter !== '' && user.geslacht !== genderFilter) {
+                            return false;
+                        }
+                        if (minAgeFilter !== '' && user.age < parseInt(minAgeFilter)) {
+                            return false;
+                        }
+                        if (maxAgeFilter !== '' && user.age > parseInt(maxAgeFilter)) {
+                            return false;
+                        }
+                        if (discriminatorFilter !== '' && user.discriminator !== discriminatorFilter) {
+                            return false;
+                        }
+                        return true;
+                    });
+                }
+
+                setUsers(data);
+            } catch (error) {
+                console.error('Fout bij het ophalen van gegevens:', error.message);
+            }
+        };
+
+        fetchData();
+    }, [genderFilter, minAgeFilter, maxAgeFilter, discriminatorFilter]);
 
     const UsersList = ({ users }) => {
         return (
@@ -39,9 +74,12 @@ const UserPortal = () => {
                         <li key={user.id}>
                             <strong>{user.firstName} {user.lastName}</strong>
                             <p>Email: {user.email}</p>
+                            <p>Voornaam: {user.voornaam}</p>
+                            <p>Achternaam: {user.achternaam}</p>
                             <p>Telefoonnummer: {user.phoneNumber}</p>
-                            <p>Geslacht: {user.gender}</p>
-                            <p>Geboortedatum: {user.birthDate}</p>
+                            <p>Geslacht: {user.geslacht}</p>
+                            <p>Soort: {user.discriminator}</p>
+                            <p>Geboortedatum: {user.geboortedatum}</p>
                         </li>
                     ))}
                 </ul>
@@ -59,8 +97,8 @@ const UserPortal = () => {
                         Geslacht:
                         <select value={genderFilter} onChange={(e) => setGenderFilter(e.target.value)}>
                             <option value="">Alle</option>
-                            <option value="man">Man</option>
-                            <option value="vrouw">Vrouw</option>
+                            <option value="Man">Man</option>
+                            <option value="Vrouw">Vrouw</option>
                             <option value="wil ik liever niet zeggen">N.v.t.</option>
                         </select>
                     </label>
@@ -82,8 +120,16 @@ const UserPortal = () => {
                             onChange={(e) => setMaxAgeFilter(e.target.value)}
                         />
                     </label>
+                    <label>
+                        Type:
+                        <select value={discriminatorFilter} onChange={(e) => setDiscriminatorFilter(e.target.value)}>
+                            <option value="">All</option>
+                            <option value="User">User</option>
+                            <option value="Bedrijf">Bedrijf</option>
+                        </select>
+                    </label>
                 </div>
-                <UsersList users={filterUsers()} />
+                <UsersList users={users} />
             </div>
         </>
     );

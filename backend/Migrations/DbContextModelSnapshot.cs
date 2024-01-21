@@ -242,6 +242,9 @@ namespace backend.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<string>("Achternaam")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -258,8 +261,14 @@ namespace backend.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Geboortedatum")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("GebruikerId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Geslacht")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -296,6 +305,9 @@ namespace backend.Migrations
 
                     b.Property<string>("UserType")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Voornaam")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -397,8 +409,16 @@ namespace backend.Migrations
                 {
                     b.HasBaseType("Models.Gebruiker");
 
+                    b.Property<string>("Informatie")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Link")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Locatie")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Naam")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasDiscriminator().HasValue("Bedrijf");
@@ -408,18 +428,8 @@ namespace backend.Migrations
                 {
                     b.HasBaseType("Models.Gebruiker");
 
-                    b.Property<string>("Achternaam")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool?>("Data")
                         .HasColumnType("bit");
-
-                    b.Property<string>("Geboortedatum")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Geslacht")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PostCode")
                         .HasColumnType("nvarchar(max)");
@@ -430,9 +440,6 @@ namespace backend.Migrations
                     b.Property<int?>("VerzorgerId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Voornaam")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasIndex("VerzorgerId");
 
                     b.HasDiscriminator().HasValue("Ervaringsdeskundige");
@@ -441,6 +448,10 @@ namespace backend.Migrations
             modelBuilder.Entity("Models.Verzorger", b =>
                 {
                     b.HasBaseType("Models.Gebruiker");
+
+                    b.Property<string>("Naam")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Verzorger_Naam");
 
                     b.HasDiscriminator().HasValue("Verzorger");
                 });

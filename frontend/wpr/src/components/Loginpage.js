@@ -23,7 +23,7 @@ const Login = () => {
 
         try {
             // Maak een HTTP-verzoek naar de Swagger API
-            const response = await fetch('https://localhost:7211/ErvaringsdeskundigeLogin/Login', {
+            const response = await fetch('https://localhost:7211/Login/Login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

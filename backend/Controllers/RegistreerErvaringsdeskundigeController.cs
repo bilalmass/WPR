@@ -45,8 +45,7 @@ namespace Controller
                 Telefoonnummer = request.Telefoonnummer,
                 Geboortedatum = request.Geboortedatum,
                 PostCode = request.PostCode,
-                Geslacht = request.Geslacht,
-                Verzorger = request.Verzorger
+                Geslacht = request.Geslacht
             };
 
             var resultCreateUser = await _userManager.CreateAsync(user, request.Wachtwoord);
@@ -101,9 +100,6 @@ namespace Controller
 
             [Required(ErrorMessage = "Geslacht is required")]
             public string Geslacht { get; set; }
-
-            [Required(ErrorMessage = "Verzorger is required")]
-            public Verzorger Verzorger { get; set; }
         }
     }
 }

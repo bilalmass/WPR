@@ -36,11 +36,15 @@ namespace Controller
                 await _roleManager.CreateAsync(new Rol { Name = Rol.Bedrijf });
             }
 
-            var user = new Gebruiker
+            var user = new Bedrijf
             {
                 UserName = request.GebruikersNaam,
                 Email = request.Email,
-                Discriminator = Rol.Bedrijf
+                Discriminator = Rol.Bedrijf,
+                Naam = request.Naam,
+                Informatie = request.Informatie,
+                Locatie = request.Locatie,
+                Link = request.Link
             };
 
             var resultCreateUser = await _userManager.CreateAsync(user, request.Wachtwoord);
@@ -77,6 +81,18 @@ namespace Controller
             [Required(ErrorMessage = "Password is required")]
             [MinLength(6, ErrorMessage = "Password must be at least 6 characters")]
             public string Wachtwoord { get; set; }
+
+            [Required(ErrorMessage = "Name is required")]
+            public string Naam { get; set; }
+
+            [Required(ErrorMessage = "Informatie is required")]
+            public string Informatie { get; set; }
+
+            [Required(ErrorMessage = "Locatie is required")]
+            public string Locatie { get; set; }
+
+            [Required(ErrorMessage = "Link is required")]
+            public string Link { get; set; }
         }
     }
 }

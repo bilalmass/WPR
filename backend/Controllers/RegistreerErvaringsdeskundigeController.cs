@@ -35,11 +35,18 @@ namespace Controller
                 await _roleManager.CreateAsync(new Rol { Name = Rol.Ervaringsdeskundige });
             }
 
-            var user = new Gebruiker
+            var user = new Ervaringsdeskundige
             {
                 UserName = request.GebruikersNaam,
                 Email = request.Email,
-                Discriminator = Rol.Ervaringsdeskundige
+                Discriminator = Rol.Ervaringsdeskundige,
+                Voornaam = request.Voornaam,
+                Achternaam = request.Achternaam,
+                Telefoonnummer = request.Telefoonnummer,
+                Geboortedatum = request.Geboortedatum,
+                PostCode = request.PostCode,
+                Geslacht = request.Geslacht,
+                Verzorger = request.Verzorger
             };
 
             var resultCreateUser = await _userManager.CreateAsync(user, request.Wachtwoord);
@@ -76,6 +83,27 @@ namespace Controller
             [Required(ErrorMessage = "Password is required")]
             [MinLength(6, ErrorMessage = "Password must be at least 6 characters")]
             public string Wachtwoord { get; set; }
+
+            [Required(ErrorMessage = "Voornaam is required")]
+            public string Voornaam { get; set; }
+
+            [Required(ErrorMessage = "Achternaam is required")]
+            public string Achternaam { get; set; }
+
+            [Required(ErrorMessage = "Telefoonnummer is required")]
+            public string Telefoonnummer { get; set; }
+
+            [Required(ErrorMessage = "Geboortedatum is required")]
+            public string Geboortedatum { get; set; }
+
+            [Required(ErrorMessage = "PostCode is required")]
+            public string PostCode { get; set; }
+
+            [Required(ErrorMessage = "Geslacht is required")]
+            public string Geslacht { get; set; }
+
+            [Required(ErrorMessage = "Verzorger is required")]
+            public Verzorger Verzorger { get; set; }
         }
     }
 }

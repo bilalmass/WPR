@@ -1,6 +1,6 @@
 describe('UserPortal Component', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:3000/userportal'); // Verander deze URL naar de juiste route voor uw UserPortal-component
+    cy.visit('http://localhost:3000/userportal'); 
   });
 
   it('loads the user portal', () => {

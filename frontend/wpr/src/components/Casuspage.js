@@ -8,12 +8,16 @@ const Casussen = () => {
     const [userRole, setUserRole] = useState('gast');
     const [casussenData, setCasussenData] = useState([]);
     const [onderzoekenData, setOnderzoekenData] = useState([]);
+    const [filteredCasussenData, setFilteredCasussenData] = useState([]);
 
     useEffect(() => {
         const fetchOnderzoekenData = async () => {
             try {
                 const onderzoekenResponse = await fetch('https://localhost:7211/Onderzoek/getall');
-                const onderzoekenData = await onderzoekenResponse.json();
+                let onderzoekenData = await onderzoekenResponse.json();
+
+                // Filter the data
+                onderzoekenData = onderzoekenData.filter(item => item.status === 'Open');
 
                 setOnderzoekenData(onderzoekenData);
             } catch (error) {
@@ -22,7 +26,8 @@ const Casussen = () => {
         };
 
         fetchOnderzoekenData();
-    }, []); 
+    }, []);
+
 
     const handleInschrijvenClick = (item) => {
         if (isLoggedIn) {
@@ -39,7 +44,7 @@ const Casussen = () => {
     return (
         <div>
             <div className="casussen-container">
-                {casussenData.map((casus) => (
+                {filteredCasussenData.map((casus) => (
                     <div key={casus.id} className="casus-card">
                         <h1>{casus.categorie}</h1>
                         <h2>{casus.titel}</h2>
@@ -47,7 +52,6 @@ const Casussen = () => {
                         <button className={"button"} onClick={() => handleInschrijvenClick(casus)}>Inschrijven</button>
                     </div>
                 ))}
-
                 {onderzoekenData.map((onderzoek) => (
                     <div key={onderzoek.id} className="casus-card">
                         <h1>{onderzoek.categorie}</h1>

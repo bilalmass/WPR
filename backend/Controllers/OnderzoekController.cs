@@ -1,3 +1,5 @@
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
@@ -13,10 +15,32 @@ public class OnderzoekController : ControllerBase
     }
 
     [HttpGet]
-    [Route("voorstellingen")]
+    [Route("onderzoek")]
     public async Task<ActionResult<IEnumerable<Onderzoek>>> GetOnderzoek()
     {
         return await _context.Onderzoeken.Where(d => d.Start > DateTime.Now).ToListAsync();
+    }
+
+    // In your OnderzoekController.cs
+
+    [HttpGet("{onderzoekId}/deelnemers")]
+    public async Task<ActionResult<IEnumerable<Ervaringsdeskundige>>> GetDeelnemers(int onderzoekId)
+    {
+        var onderzoek = await _context.Onderzoeken
+            .Include(o => o.Deelnemers)
+            .ThenInclude(d => d.Ervaringsdeskundige)
+            .FirstOrDefaultAsync(o => o.OnderzoekId == onderzoekId);
+
+        if (onderzoek == null)
+        {
+            return NotFound();
+        }
+
+        var deelnemers = onderzoek.Deelnemers
+            .Select(d => d.Ervaringsdeskundige)
+            .ToList();
+
+        return Ok(deelnemers);
     }
 
     [HttpGet]
@@ -77,23 +101,54 @@ public class OnderzoekController : ControllerBase
     }
     [HttpPost]
     [Route("create")]
+    [Authorize(Roles = "Bedrijf,Beheerder")]
     public async Task<IActionResult> CreateOnderzoek([FromBody] CreateOnderzoekRequestData request)
     {
-        var v = new Onderzoek
+        // Controleer of de ingelogde gebruiker een "Bedrijf" of "Beheerder" is
+        if (!User.IsInRole("Bedrijf") && !User.IsInRole("Beheerder"))
+        {
+            return Forbid(); // Gebruiker heeft niet de juiste rol, verbied toegang
+        }
+
+        // Haal de ID van de ingelogde gebruiker op
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+        // Zoek het Bedrijf object dat overeenkomt met de ingelogde gebruiker
+        var bedrijf = await _context.Bedrijven.FirstOrDefaultAsync(b => b.GebruikerId == userId);
+        if (bedrijf == null)
+        {
+            return BadRequest("De ingelogde gebruiker is geen bedrijf.");
+        }
+
+        var onderzoek = new Onderzoek
         {
             Titel = request.Titel,
             Beschrijving = request.Beschrijving,
             Start = request.Start,
             Categorie = request.Categorie,
-            Beloning = request.Beloning
+            Beloning = request.Beloning,
+            Bedrijf = bedrijf // Koppel het Bedrijf aan het Onderzoek
         };
 
-        await _context.Onderzoeken.AddAsync(v);
+        await _context.Onderzoeken.AddAsync(onderzoek);
         await _context.SaveChangesAsync();
-        
-        return CreatedAtAction(request.Titel, new { id = v.OnderzoekId }, request);
-        //  return await result.Succeeded ? new BadRequestObjectResult(result) : StatusCode(201);
+
+        return CreatedAtAction(nameof(GetOnderzoek), new { id = onderzoek.OnderzoekId }, onderzoek);
     }
+
+    // Methode om het specifieke onderzoek op te halen (voor CreatedAtAction)
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Onderzoek>> GetOnderzoek(int id)
+    {
+        var onderzoek = await _context.Onderzoeken.FindAsync(id);
+        if (onderzoek == null)
+        {
+            return NotFound();
+        }
+        return onderzoek;
+    }
+
+
 }
 public class CreateOnderzoekRequestData
 {

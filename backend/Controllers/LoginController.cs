@@ -7,22 +7,20 @@ namespace Controller
 {
     [Route("[controller]")]
     [ApiController]
-    public class BedrijfLoginController : ControllerBase
+    public class LoginController : ControllerBase
     {
         private readonly SignInManager<Gebruiker> _signInManager;
         private readonly UserManager<Gebruiker> _userManager;
-        private readonly DbContext _context;
 
-        public BedrijfLoginController(SignInManager<Gebruiker> signInManager, UserManager<Gebruiker> userManager, DbContext context)
+        public LoginController(SignInManager<Gebruiker> signInManager, UserManager<Gebruiker> userManager)
         {
             _signInManager = signInManager;
             _userManager = userManager;
-            _context = context;
         }
 
         [HttpPost]
-        [Route("BedrijfLogin")]
-        public async Task<IActionResult> Login([FromBody] BedrijfLoginRequestData request)
+        [Route("Login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequestData request)
         {
             var result = await _signInManager.PasswordSignInAsync(request.GebruikersNaam, request.Wachtwoord, false, lockoutOnFailure: false);
 
@@ -36,7 +34,7 @@ namespace Controller
             }
         }
 
-        public class BedrijfLoginRequestData
+        public class LoginRequestData
         {
             [Required(ErrorMessage = "Username is required")]
             public string GebruikersNaam { get; set; }

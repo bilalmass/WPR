@@ -21,7 +21,6 @@ public class OnderzoekController : ControllerBase
         return await _context.Onderzoeken.Where(d => d.Start > DateTime.Now).ToListAsync();
     }
 
-    // In your OnderzoekController.cs
 
     [HttpGet("{onderzoekId}/deelnemers")]
     public async Task<ActionResult<IEnumerable<Ervaringsdeskundige>>> GetDeelnemers(int onderzoekId)
@@ -54,7 +53,7 @@ public class OnderzoekController : ControllerBase
     [Route("populariteit")]
     public async Task<ActionResult<IEnumerable<Onderzoek>>> GetOnderzoekPopulariteit()
     {
-        return await _context.Onderzoeken.OrderBy(p => p.Titel).ToListAsync(); // Titel veranderen naar Populariteit
+        return await _context.Onderzoeken.OrderBy(p => p.Titel).ToListAsync(); 
     }
     [HttpGet]
     [Route("getall")]
@@ -101,24 +100,24 @@ public class OnderzoekController : ControllerBase
     }
     [HttpPost]
     [Route("create")]
-    [Authorize(Roles = "Bedrijf,Beheerder")]
+    //[Authorize(Roles = "Bedrijf,Beheerder")]
     public async Task<IActionResult> CreateOnderzoek([FromBody] CreateOnderzoekRequestData request)
     {
         // Controleer of de ingelogde gebruiker een "Bedrijf" of "Beheerder" is
-        if (!User.IsInRole("Bedrijf") && !User.IsInRole("Beheerder"))
-        {
-            return Forbid(); // Gebruiker heeft niet de juiste rol, verbied toegang
-        }
-
-        // Haal de ID van de ingelogde gebruiker op
-        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+     //   if (!User.IsInRole("Bedrijf") && !User.IsInRole("Beheerder"))
+       // {
+        //    return Forbid(); // Gebruiker heeft niet de juiste rol, verbied toegang
+       // }
+//
+ //       // Haal de ID van de ingelogde gebruiker op
+   //     var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
         // Zoek het Bedrijf object dat overeenkomt met de ingelogde gebruiker
-        var bedrijf = await _context.Bedrijven.FirstOrDefaultAsync(b => b.GebruikerId == userId);
-        if (bedrijf == null)
-        {
-            return BadRequest("De ingelogde gebruiker is geen bedrijf.");
-        }
+      //  var bedrijf = await _context.Bedrijven.FirstOrDefaultAsync(b => b.GebruikerId == userId);
+        // if (bedrijf == null)
+        // {
+        //     return BadRequest("De ingelogde gebruiker is geen bedrijf.");
+        // }
 
         var onderzoek = new Onderzoek
         {
@@ -127,7 +126,8 @@ public class OnderzoekController : ControllerBase
             Start = request.Start,
             Categorie = request.Categorie,
             Beloning = request.Beloning,
-            Bedrijf = bedrijf // Koppel het Bedrijf aan het Onderzoek
+            Status = "Open"
+          //  Bedrijf = bedrijf // Koppel het Bedrijf aan het Onderzoek
         };
 
         await _context.Onderzoeken.AddAsync(onderzoek);

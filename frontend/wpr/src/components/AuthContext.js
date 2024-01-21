@@ -3,8 +3,8 @@
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [isLoggedIn, setLoggedIn] = useState(true);
-    const [userRole, setUserRole] = useState('bedrijf');
+    const [isLoggedIn, setLoggedIn] = useState(false);
+    const [userRole, setUserRole] = useState(null);
 //keuze uit 'bedrijf', 'gebruiker', 'beheerder, 'gast'
     const logIn = (role) => {
         setLoggedIn(true);

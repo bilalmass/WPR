@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from './AuthContext';
-
+import style from './componentstyling/onderzoekform.css'
 function OnderzoekForm() {
  const { authToken } = useAuth();
 

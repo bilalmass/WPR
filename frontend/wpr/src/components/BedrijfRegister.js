@@ -70,7 +70,7 @@ const BedrijfRegister = () => {
             }
         } catch (error) {
             console.error('Error:', error);
-            setApiError('Er is iets misgegaan bij het registreren. Probeer het opnieuw.');
+            setApiError('Er is iets misgegaan bij het registreren. Probeer het opnieuw..');
         } finally {
             setLoading(false);
         }

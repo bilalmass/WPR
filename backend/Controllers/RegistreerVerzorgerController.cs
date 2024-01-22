@@ -10,11 +10,16 @@ namespace Controller
     [ApiController]
     public class RegistreerVerzorgerController : ControllerBase
     {
+        // Verantwoordelijk voor het beheren van het aanmeldingsproces van gebruikers, zoals inloggen, uitloggen en externe aanmelding.
         private readonly SignInManager<Gebruiker> _signInManager;
+
+        // Verantwoordelijk voor het beheren van gebruikers, zoals het maken, verwijderen en ophalen van gebruikers.
         private readonly UserManager<Gebruiker> _userManager;
 
+        // Verantwoordelijk voor het beheren van rollen, zoals het maken, verwijderen en ophalen van rollen.
         private readonly RoleManager<Rol> _roleManager;
 
+        // Constructor om SignInManager, UserManager en RoleManager te initialiseren via Dependency Injection
         public RegistreerVerzorgerController(
             SignInManager<Gebruiker> signInManager,
             UserManager<Gebruiker> userManager,
@@ -23,9 +28,9 @@ namespace Controller
             _signInManager = signInManager;
             _userManager = userManager;
             _roleManager = roleManager;
-
         }
 
+        // HTTP POST-endpoint voor het registreren van een verzorger account
         [HttpPost]
         [Route("VerzorgerRegistreer")]
         public async Task<IActionResult> CreateAccount([FromBody] CreateVerzorgerRequestData request)
@@ -66,21 +71,21 @@ namespace Controller
             return BadRequest(resultCreateUser.Errors);
         }
 
-
+        // Dataklasse om het registratieverzoek voor een verzorger voor te stellen met validatieattributen
         public class CreateVerzorgerRequestData
         {
-            [Required(ErrorMessage = "Username is required")]
+            [Required(ErrorMessage = "Gebruikersnaam is verplicht")]
             public string GebruikersNaam { get; set; }
 
-            [Required(ErrorMessage = "Email is required")]
-            [EmailAddress(ErrorMessage = "Invalid email address")]
+            [Required(ErrorMessage = "E-mail is verplicht")]
+            [EmailAddress(ErrorMessage = "Ongeldig e-mailadres")]
             public string Email { get; set; }
 
-            [Required(ErrorMessage = "Password is required")]
-            [MinLength(6, ErrorMessage = "Password must be at least 6 characters")]
+            [Required(ErrorMessage = "Wachtwoord is verplicht")]
+            [MinLength(6, ErrorMessage = "Wachtwoord moet minimaal 6 tekens lang zijn")]
             public string Wachtwoord { get; set; }
 
-            [Required(ErrorMessage = "Naam is required")]
+            [Required(ErrorMessage = "Naam is verplicht")]
             public string Naam { get; set; }
         }
     }

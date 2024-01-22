@@ -13,6 +13,7 @@ namespace Controller
         private readonly SignInManager<Gebruiker> _signInManager;
         private readonly UserManager<Gebruiker> _userManager;
         private readonly RoleManager<Rol> _roleManager;
+        
 
         public RegistreerBedrijfController(
             SignInManager<Gebruiker> signInManager,

@@ -23,14 +23,14 @@ const Login = () => {
 
         try {
             // Maak een HTTP-verzoek naar de Swagger API
-            const response = await fetch('https://localhost:7211/ErvaringsdeskundigeLogin/Login', {
+            const response = await fetch('https://localhost:7211/Login/Login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    gebruikersNaam: username,
-                    wachtwoord: password,
+                    GebruikersNaam: username,
+                    Wachtwoord: password,
                 }),
             });
 
@@ -59,7 +59,7 @@ const Login = () => {
             <h2>Login</h2>
             <form onSubmit={handleLogin}>
                 <div className="form-group">
-                    <label htmlFor="adres">E-mailadres:</label>
+                    <label htmlFor="email">E-mailadres:</label>
                     <br />
                     <input type="text" id="username" name="username" />
                 </div>

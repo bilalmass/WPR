@@ -1,18 +1,19 @@
-﻿/* BedrijfRegister.js */
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import './componentstyling/registerpage.css';
-import axios from 'axios';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 const BedrijfRegister = () => {
+    const navigate = useNavigate();
+    const [apiError, setApiError] = useState('')
     const [formData, setFormData] = useState({
-        bedrijfsnaam: '',
-        lastName: '',
+        gebruikersNaam: '',
+        Naam: '',
         email: '',
-        phoneNumber: '',
+        informatie: '',
         password: '',
         confirmPassword: '',
-        gender: 'male',
-        birthDate: '',
+        locatie: '',
+        link: '',
     });
 
     const [passwordError, setPasswordError] = useState('');
@@ -36,21 +37,47 @@ const BedrijfRegister = () => {
             return;
         }
 
-        console.log('Registratiegegevens:', formData);
+        fetch('https://localhost:7211/RegistreerBedrijf/BedrijfRegistreer', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+            body: JSON.stringify({
+                "GebruikersNaam": formData.Naam,
+                "Email": formData.email,
+                "wachtwoord": formData.password,
+                "Naam": formData.Naam,
+                "Informatie": formData.informatie,
+                "Locatie": formData.locatie,
+                "Link": formData.link
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            navigate('/home');
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            setApiError('Er is iets misgegaan bij het registreren. Probeer het opnieuw.');
+        });
     };
+
+
 
     return (
         <div className="registration-container">
             <div className="registration-form">
                 <div className="form-row">
                     <div className="input-group">
-                        <label>Bedrijfsnaam:</label>
-                        <input type="text" name="bedrijfsnaam" value={formData.bedrijfsnaam} onChange={handleInputChange} />
+                        <label>Gebruikersnaam:</label>
+                        <input type="text" name="gebruikersNaam" value={formData.gebruikersNaam} onChange={handleInputChange} />
                     </div>
 
                     <div className="input-group">
-                        <label>Achternaam:</label>
-                        <input type="text" name="lastName" value={formData.lastName} onChange={handleInputChange} />
+                        <label>Bedrijfsnaam:</label>
+                        <input type="text" name="Naam" value={formData.Naam} onChange={handleInputChange} />
                     </div>
                 </div>
 
@@ -61,8 +88,8 @@ const BedrijfRegister = () => {
                     </div>
 
                     <div className="input-group">
-                        <label>Telefoonnummer:</label>
-                        <input type="tel" name="phoneNumber" value={formData.phoneNumber} onChange={handleInputChange} />
+                        <label>Informatie:</label>
+                        <input type="text" name="informatie" value={formData.informatie} onChange={handleInputChange} />
                     </div>
                 </div>
 
@@ -81,22 +108,21 @@ const BedrijfRegister = () => {
 
                 <div className="form-row">
                     <div className="input-group">
-                        <label>Geboortedatum:</label>
-                        <input type="date" name="birthDate" value={formData.birthDate} onChange={handleInputChange} />
+                        <label>Link:</label>
+                        <input type="link" name="link" value={formData.link} onChange={handleInputChange} />
                     </div>
 
                     <div className="input-group">
-                        <label>Geslacht:</label>
-                        <select name="gender" value={formData.gender} onChange={handleInputChange}>
-                            <option value="male">Man</option>
-                            <option value="female">Vrouw</option>
-                            <option value="other">Zeg ik liever niet</option>
-                        </select>
+                        <label>Locatie:</label>
+                        <input type="text" name="locatie" v={formData.locatie} onChange={handleInputChange}>
+                        </input>
                     </div>
                 </div>
 
 
                 <button onClick={handleRegisterClick}>Registreren</button>
+
+                {apiError && <p>{apiError}</p>}
             </div>
         </div>
     );

@@ -66,7 +66,7 @@ const BedrijfRegister = () => {
             } else {
                 const errorData = await response.json();
                 console.error('Error:', errorData);
-                setApiError('Er is iets misgegaan bij het registreren. Probeer het opnieuw.');
+                setApiError('Er is iets misgegaan bij het registreren. Probeer het opnieuw!');
             }
         } catch (error) {
             console.error('Error:', error);

@@ -62,7 +62,7 @@ const BedrijfRegister = () => {
                 const data = await response.json();
                 console.log('Success:', data);
                 setServerResponse('Registratie succesvol!');
-                navigate('/home');
+                navigate('/Login');
             } else {
                 const errorData = await response.json();
                 console.error('Error:', errorData);

@@ -5,7 +5,7 @@ public class Ervaringsdeskundige : Gebruiker
     public string? Achternaam {get; set;}
     public string? Telefoonnummer {get; set;}
     private DateOnly _Geboortedatum;
-    public string Geboortedatum
+    public string? Geboortedatum
         {
             get => _Geboortedatum.ToString("yyyy-MM-dd");
             set => _Geboortedatum = DateOnly.Parse(value);

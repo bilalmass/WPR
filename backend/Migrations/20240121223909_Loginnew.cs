@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace backend.Migrations
 {
-    public partial class stringnaarint : Migration
+    public partial class Loginnew : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -16,17 +16,21 @@ namespace backend.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     GebruikerId = table.Column<int>(type: "int", nullable: false),
+                    Voornaam = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Achternaam = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Geboortedatum = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Geslacht = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: true, defaultValue: "test"),
                     UserType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Naam = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Voornaam = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Achternaam = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Informatie = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Locatie = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Link = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Telefoonnummer = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Geboortedatum = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PostCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Geslacht = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Data = table.Column<bool>(type: "bit", nullable: true),
                     VerzorgerId = table.Column<int>(type: "int", nullable: true),
+                    Verzorger_Naam = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),

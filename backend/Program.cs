@@ -1,12 +1,7 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Threading.Tasks;
-using Models; // Ga ervan uit dat je modelklassen zich in een namespace genaamd 'Models' bevinden
+using Models;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors(options =>
@@ -36,7 +31,7 @@ builder.Services.AddSwaggerGen(c =>
 
 // Voeg DbContext toe met SQL Server
 builder.Services.AddDbContext<DbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Voeg Identity services toe met gebruikersklasse Gebruiker en rolklasse Rol
 builder.Services.AddIdentity<Gebruiker, Rol>()

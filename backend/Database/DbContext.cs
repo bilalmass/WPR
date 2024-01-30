@@ -12,17 +12,8 @@ public class DbContext : IdentityDbContext<Gebruiker, Rol, int>
    }
 
     // Configuratiemethode voor DbContext-options
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        if (!optionsBuilder.IsConfigured)
-        {
-            // Verbindingsreeks voor de database (let op: bewaar gevoelige informatie veilig)
-            string connectionString = "Server=wprserver.database.windows.net;Database=WPRDB;User Id=DataBaseAdmin;Password=SterkWW369.;";
-
-            // Gebruik SQL Server als de databaseprovider met de opgegeven verbindingsreeks
-            optionsBuilder.UseSqlServer(connectionString);
-        }
-    }
+   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) =>
+    optionsBuilder.UseSqlite("Data Source=database.db");
 
     // DbSet-properties voor elke entiteit in de database
     public DbSet<Bedrijf>? Bedrijven { get; set; }

@@ -129,6 +129,38 @@ public class OnderzoekController : ControllerBase
         return onderzoek;
     }
 
+    [HttpPost("register/{onderzoekId}")]
+    public async Task<IActionResult> RegisterForOnderzoek(int onderzoekId)
+    {
+        // Haal de ID van de ingelogde gebruiker op
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+        // Zoek het Onderzoek object dat overeenkomt met de gegeven onderzoekId
+        var onderzoek = await _context.Onderzoeken.FirstOrDefaultAsync(o => o.OnderzoekId == onderzoekId);
+        if (onderzoek == null)
+        {
+            return NotFound("Onderzoek niet gevonden");
+        }
+
+        // Zoek het Ervaringsdeskundige object dat overeenkomt met de ingelogde gebruiker
+        var ervaringsdeskundige = await _context.Ervaringsdeskundigen.FirstOrDefaultAsync(e => e.Id == userId);
+        if (ervaringsdeskundige == null)
+        {
+            return BadRequest("De ingelogde gebruiker is geen ervaringsdeskundige.");
+        }
+
+        // Voeg de ervaringsdeskundige toe aan het onderzoek
+        onderzoek.Deelnemers.Add(new ErvaringsdeskundigeOnderzoek
+        {
+            Ervaringsdeskundige = ervaringsdeskundige,
+            Onderzoek = onderzoek
+        });
+
+        await _context.SaveChangesAsync();
+
+        return Ok(new { message = "Je bent succesvol ingeschreven voor het onderzoek." });
+    }
+
 }
 public class CreateOnderzoekRequestData
     {

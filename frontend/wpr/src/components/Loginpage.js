@@ -37,14 +37,7 @@ const Login = () => {
             // Controleer of het verzoek succesvol was
             if (response.ok) {
                 const data = await response.json();
-
-                // Controleer of de inloggegevens geldig zijn
-                if (data.success) {
-                    console.log('Ingelogd als:', data.user);
-                    setLoginError('');
-                } else {
-                    setLoginError('Ongeldige gebruikersnaam of wachtwoord');
-                }
+                localStorage.setItem('token', data.token);
             } else {
                 setLoginError('Er is een fout opgetreden bij het inloggen');
             }
@@ -77,7 +70,7 @@ const Login = () => {
                         Nog geen lid? <a href="#" onClick={handleRegisterClick}>Registreer je hier</a>
                     </div>
                 </div>
-                <button className="button" type="submit">Inloggen</button>
+                <button className="button" type="submit" onClick={handleLogin}>Inloggen</button>
             </form>
 
             <div className={`modal ${showKeuze ? 'visible' : 'hidden'}`}>

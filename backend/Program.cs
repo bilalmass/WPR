@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using System.Text.Json.Serialization;
+using Controller;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors(options =>
@@ -81,10 +82,12 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseMiddleware<JwtMiddleware>();
 app.UseCors("AllowMyOrigin");
 
 app.MapControllers();
+
+
 
 // Voeg de rollen toe
 CreateRoles(app.Services).Wait();

@@ -6,9 +6,10 @@ export const AuthProvider = ({ children }) => {
     const [isLoggedIn, setLoggedIn] = useState(false);
     const [userRole, setUserRole] = useState(null);
 //keuze uit 'bedrijf', 'gebruiker', 'beheerder, 'gast'
-    const logIn = (role) => {
+    const logIn = (role, token) => {
         setLoggedIn(true);
         setUserRole(role);
+        localStorage.setItem('token', token);
     };
 
     const logOut = () => {

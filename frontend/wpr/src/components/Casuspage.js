@@ -8,18 +8,33 @@ const Casussen = () => {
     const [userRole, setUserRole] = useState('gast');
     const [casussenData, setCasussenData] = useState([]);
     const [onderzoekenData, setOnderzoekenData] = useState([]);
-    const [filteredCasussenData, setFilteredCasussenData] = useState([]);
+    const [resultaten, setResultaten] = useState([]);
 
     useEffect(() => {
         const fetchOnderzoekenData = async () => {
             try {
-                const onderzoekenResponse = await fetch('https://localhost:7211/Onderzoek/getall');
-                let onderzoekenData = await onderzoekenResponse.json();
+                const onderzoekenResponse = await fetch('https://localhost:7211/Onderzoek');
+                let responseJson = await onderzoekenResponse.json();
+
+                let onderzoekenData = responseJson.$values;
 
                 // Filter the data
                 onderzoekenData = onderzoekenData.filter(item => item.status === 'Open');
 
                 setOnderzoekenData(onderzoekenData);
+
+                // Maak een lege array om de resultaten in op te slaan
+                let resultatenArray = [];
+
+                // Loop door de onderzoekenData
+                for (let i = 0; i < onderzoekenData.length; i++) {
+                    const onderzoek = onderzoekenData[i];
+                    // Voeg het onderzoek toe aan de resultatenArray
+                    resultatenArray.push(onderzoek);
+                }
+
+                // Update de resultaten staat variabele
+                setResultaten(resultatenArray);
             } catch (error) {
                 console.error('Fout bij het ophalen van onderzoeken:', error);
             }
@@ -28,12 +43,27 @@ const Casussen = () => {
         fetchOnderzoekenData();
     }, []);
 
-
-    const handleInschrijvenClick = (item) => {
+    const handleInschrijvenClick = async (item) => {
         if (isLoggedIn) {
-            setSelectedCasus(item);
+            try {
+                const response = await fetch(`https://localhost:7211/Onderzoek/register/${item.id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log(data);
+            } catch (error) {
+                console.error('Fout bij het inschrijven:', error);
+            }
         } else {
-            console.log("Please log in to subscribe.");
+            alert("Je bent niet ingelogd");
         }
     };
 
@@ -42,43 +72,19 @@ const Casussen = () => {
     };
 
     return (
-        <div>
-            <div className="casussen-container">
-                {filteredCasussenData.map((casus) => (
-                    <div key={casus.id} className="casus-card">
-                        <h1>{casus.categorie}</h1>
-                        <h2>{casus.titel}</h2>
-                        <p>{casus.beschrijving}</p>
-                        <button className={"button"} onClick={() => handleInschrijvenClick(casus)}>Inschrijven</button>
-                    </div>
-                ))}
-                {onderzoekenData.map((onderzoek) => (
-                    <div key={onderzoek.id} className="casus-card">
-                        <h1>{onderzoek.categorie}</h1>
-                        <h2>{onderzoek.titel}</h2>
-                        <p>{onderzoek.beschrijving}</p>
-                        <button className={"button"} onClick={() => handleInschrijvenClick(onderzoek)}>Inschrijven</button>
-                    </div>
-                ))}
-            </div>
-
-            {selectedCasus && (
-                <div className="venster">
-                    <div className="venster-inhoud">
-                        <span className="sluit" onClick={sluitVenster}>
-                            &times;
-                        </span>
-                        <h1>{selectedCasus.type}</h1>
-                        <h2>{selectedCasus.titel}</h2>
-                        <p>{selectedCasus.beschrijving}</p>
-                        <p>{selectedCasus.beloning}</p>
-                        <p>{selectedCasus.start}</p>
-                        <button>Inschrijven</button>
-                    </div>
+        <div className="casussen-container">
+            {/* Render de resultaten */}
+            {resultaten.map((onderzoek) => (
+                <div key={onderzoek.id} className='casus-card'>
+                    <h1>{onderzoek.categorie}</h1>
+                    <h2>{onderzoek.titel}</h2>
+                    <p>{onderzoek.beschrijving}</p>
+                    <button className={"button"} onClick={() => handleInschrijvenClick(onderzoek)}>Inschrijven</button>
                 </div>
-            )}
+            ))}
         </div>
     );
 };
+
 
 export default Casussen;

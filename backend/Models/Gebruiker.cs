@@ -6,7 +6,7 @@ namespace Models;
 
 public class Gebruiker : IdentityUser<int>
 {
-    public int GebruikerId {get; set;}
+
     public string? Voornaam {get; set;}
     public string? Achternaam {get; set;}
     public string? Geboortedatum {get; set;}

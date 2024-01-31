@@ -28,56 +28,54 @@ namespace AccessibilityApi.Controllers
             return Ok(bedrijfsProfiel);
         }
 
-        // POST: /bedrijf/profiel/update
-        // [HttpPut("bedrijfprofiel/update")]
-        // public async Task<IActionResult> UpdateProfielAsync([FromBody] Bedrijf updatedBedrijf)
-        // {
-        //     var bedrijf = await _context.Bedrijven.FirstOrDefaultAsync();
-        //     if (bedrijf == null)
-        //     {
-        //         return NotFound("Bedrijven niet gevonden");
-        //     }
-
-        //     bedrijf.Naam = updatedBedrijf.Naam;
-
-        //     await _context.SaveChangesAsync();
-
-        //     return Ok("Bedrijfsprofiel succesvol bijgewerkt");
-        // }
-
-        [Authorize(Roles = "BedrijfRole")]
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateBedrijfProfile(int id, [FromBody] BedrijfUpdateModel model)
+        [HttpPut("bedrijfprofiel/update")]
+        public IActionResult UpdateProfiel([FromBody] BedrijfsProfielUpdateModel model)
         {
-            var bedrijf = await _context.Bedrijven.FindAsync(id);
-            if (bedrijf == null)
+            try
             {
-                return NotFound();
+                var bedrijf = _context.Bedrijven.FirstOrDefault(b => b.Id == model.GebruikerId);
+
+                if (bedrijf == null)
+                    return NotFound("Bedrijf niet gevonden");
+
+                if (!string.IsNullOrEmpty(model.Bedrijfsnaam))
+                    bedrijf.Naam = model.Bedrijfsnaam;
+
+                if (!string.IsNullOrEmpty(model.Informatie))
+                    bedrijf.Informatie = model.Informatie;
+
+                if (!string.IsNullOrEmpty(model.Locatie))
+                    bedrijf.Locatie = model.Locatie;
+
+                if (!string.IsNullOrEmpty(model.Link))
+                    bedrijf.Link = model.Link;
+
+                _context.SaveChanges();
+
+                return Ok("Bedrijfsprofiel succesvol bijgewerkt");
             }
-
-            if(model.Naam != null) bedrijf.Naam = model.Naam;
-            // ... andere properties?
-
-            _context.Bedrijven.Update(bedrijf);
-            await _context.SaveChangesAsync();
-
-            return Ok(bedrijf); 
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Er is een fout opgetreden: {ex.Message}");
+            }
         }
 
-        // BedrijfUpdateModel.cs
-        public class BedrijfUpdateModel
+        public class BedrijfsProfielUpdateModel
         {
-            public string? Naam { get; set; }
-            // andere properties?
+            public int GebruikerId { get; set; }
+            public string? Bedrijfsnaam { get; set; }
+            public string? Informatie { get; set; }
+            public string? Locatie { get; set; }
+            public string? Link { get; set; }
+
         }
-
-
+        
         // GET: /bedrijf/onderzoeken
         [HttpGet("onderzoeken")]
         public async Task<IActionResult> OnderzoekenOverzichtAsync([FromBody] int bedrijfId)
         {
             var bedrijfOnderzoeken = await _context.Onderzoeken
-                .Where(o => o.Bedrijf.GebruikerId == bedrijfId)
+                .Where(o => o.Bedrijf.Id == bedrijfId)
                 .ToListAsync();
             if (!bedrijfOnderzoeken.Any())
             {
@@ -86,64 +84,6 @@ namespace AccessibilityApi.Controllers
 
             return Ok(bedrijfOnderzoeken);
         }  
-
-        // GET: /bedrijf/onderzoeken/{onderzoekId}
-        [HttpGet("onderzoeken/{onderzoekId}")]
-        public async Task<IActionResult> OnderzoekDetailsAsync([FromBody] int onderzoekId)
-        {
-            var onderzoek = await _context.Onderzoeken
-                .FirstOrDefaultAsync(o => o.OnderzoekId == onderzoekId);
-            if (onderzoek == null)
-            {
-                return NotFound("Onderzoek niet gevonden");
-            }
-
-            return Ok(onderzoek);
-        }
-
-        // POST: /bedrijf/onderzoeken/nieuw
-        [HttpPost("onderzoeken/nieuw")]
-        public async Task<IActionResult> NieuwOnderzoekToevoegenAsync([FromBody] Onderzoek onderzoek)
-        {
-            await _context.Onderzoeken.AddAsync(onderzoek);
-            await _context.SaveChangesAsync();
-
-            return Ok("Nieuw onderzoek toegevoegd");
-        }
-
-        // PUT: /bedrijf/onderzoeken/{onderzoekId}/bewerken
-        [HttpPut("onderzoeken/{onderzoekId}/bewerken")]
-        public async Task<IActionResult> OnderzoekBijwerkenAsync(int onderzoekId, [FromBody] Onderzoek bijgewerktOnderzoek)
-        {
-            var onderzoek = await _context.Onderzoeken
-                .FirstOrDefaultAsync(o => o.OnderzoekId == onderzoekId);
-            if (onderzoek == null)
-            {
-                return NotFound("Onderzoek niet gevonden");
-            }
-
-            onderzoek.Titel = bijgewerktOnderzoek.Titel;
-            await _context.SaveChangesAsync();
-
-            return Ok("Onderzoek succesvol bijgewerkt");
-        }
-
-        // DELETE: /bedrijf/onderzoeken/{onderzoekId}/verwijderen
-        [HttpDelete("onderzoeken/{onderzoekId}/verwijderen")]
-        public async Task<IActionResult> OnderzoekVerwijderenAsync([FromBody] int onderzoekId)
-        {
-            var onderzoek = await _context.Onderzoeken
-                .FirstOrDefaultAsync(o => o.OnderzoekId == onderzoekId);
-            if (onderzoek == null)
-            {
-                return NotFound("Onderzoek niet gevonden");
-            }
-
-            _context.Onderzoeken.Remove(onderzoek);
-            await _context.SaveChangesAsync();
-
-            return Ok("Onderzoek succesvol verwijderd");
-        }
 
         // GET: /bedrijf/opdrachten/chat/{deelnemerId}
         [HttpGet("opdrachten/chat/{deelnemerId}")]
@@ -157,7 +97,7 @@ namespace AccessibilityApi.Controllers
         [HttpGet("deelnemer/{deelnemerId}/profiel")]
         public async Task<IActionResult> BekijkProfielDeelnemerAsync([FromBody] int deelnemerId)
         {
-            var deelnemer = await _context.DeelnemersOnderzoek.FirstOrDefaultAsync(d => d.Ervaringsdeskundige.GebruikerId == deelnemerId);
+            var deelnemer = await _context.DeelnemersOnderzoek.FirstOrDefaultAsync(d => d.Ervaringsdeskundige.Id == deelnemerId);
 
             if (deelnemer == null)
             {
@@ -166,11 +106,19 @@ namespace AccessibilityApi.Controllers
             return Ok(deelnemer);
         }
         
-        public class CreateBedrijfModel
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteBedrijf(int id)
         {
-            public string Email { get; set; }
-            public string Bedrijfsnaam { get; set; } 
-        }
+            var bedrijf = await _context.Bedrijven.FindAsync(id);
+            if (bedrijf == null)
+            {
+                return NotFound();
+            }
 
+            _context.Bedrijven.Remove(bedrijf);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 }

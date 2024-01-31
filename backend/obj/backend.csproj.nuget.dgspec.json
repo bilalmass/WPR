@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\yassi\\Desktop\\School\\WPR\\backend\\backend.csproj": {}
+    "C:\\Users\\Ryzen7 3700x\\OneDrive\\Bureaublad\\WPR\\backend\\backend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\yassi\\Desktop\\School\\WPR\\backend\\backend.csproj": {
+    "C:\\Users\\Ryzen7 3700x\\OneDrive\\Bureaublad\\WPR\\backend\\backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\yassi\\Desktop\\School\\WPR\\backend\\backend.csproj",
+        "projectUniqueName": "C:\\Users\\Ryzen7 3700x\\OneDrive\\Bureaublad\\WPR\\backend\\backend.csproj",
         "projectName": "backend",
-        "projectPath": "C:\\Users\\yassi\\Desktop\\School\\WPR\\backend\\backend.csproj",
-        "packagesPath": "C:\\Users\\yassi\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\yassi\\Desktop\\School\\WPR\\backend\\obj\\",
+        "projectPath": "C:\\Users\\Ryzen7 3700x\\OneDrive\\Bureaublad\\WPR\\backend\\backend.csproj",
+        "packagesPath": "C:\\Users\\Ryzen7 3700x\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Ryzen7 3700x\\OneDrive\\Bureaublad\\WPR\\backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\yassi\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Ryzen7 3700x\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
@@ -114,6 +114,24 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[6.0.26, 6.0.26]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Host.win-x64",
+              "version": "[6.0.26, 6.0.26]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[6.0.26, 6.0.26]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[6.0.26, 6.0.26]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -122,7 +140,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.404\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
         }
       }
     }

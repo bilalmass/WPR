@@ -33,14 +33,15 @@ namespace Controller
             // Controleer of de aanmeldpoging succesvol was
             if (result.Succeeded)
             {
-                // Geef een succesbericht terug als de aanmelding succesvol is
-                return Ok("Aanmelding succesvol");
+                // Return a success message as a JSON object
+                return Ok(new { Success = true, Message = "Aanmelding succesvol" });
             }
             else
             {
-                // Geef een slecht verzoek terug met een bericht als de aanmelding mislukt
-                return BadRequest("Aanmelding mislukt");
+                // Return a failure message as a JSON object
+                return BadRequest(new { Success = false, Message = "Aanmelding mislukt" });
             }
+
         }
 
         // Dataklasse om het aanmeldingsverzoek voor te stellen met validatieattributen

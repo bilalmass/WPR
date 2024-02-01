@@ -16,7 +16,6 @@ const Casussen = () => {
                 const onderzoekenResponse = await fetch('https://localhost:7211/Onderzoek/getall');
                 let onderzoekenData = await onderzoekenResponse.json();
 
-                // Filter the data
                 onderzoekenData = onderzoekenData.filter(item => item.status === 'Open');
 
                 setOnderzoekenData(onderzoekenData);

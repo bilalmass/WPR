@@ -26,5 +26,46 @@ namespace Controller
 
             return gebruikers;
         }
+
+        [HttpGet]
+        [Route("discriminator/{username}")]
+        public ActionResult<string> GetGebruikerDiscriminator(string username)
+        {
+            var discriminator = _dbContext.Gebruikers
+                .Where(u => u.UserName == username)
+                .Select(u => u.Discriminator)
+                .FirstOrDefault();
+
+            if (discriminator == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(discriminator);
+        }
+
+        
+        [HttpDelete]
+        [Route("verwijderalleusers")]
+        public void VerwijderGebruikers()
+        {
+            _dbContext.Gebruikers.RemoveRange(_dbContext.Gebruikers);
+            _dbContext.SaveChanges();
+        }
+        [HttpGet]
+        [Route("gebruikerinfo/{username}")]
+        public ActionResult<Gebruiker> GetGebruikerInfo(string username)
+        {
+            var gebruiker = _dbContext.Gebruikers.FirstOrDefault(u => u.UserName == username);
+
+            if (gebruiker == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(gebruiker);
+        }
+
     }
+    
 }

@@ -17,21 +17,22 @@ import Mijncasussen from './pages/Mijncasussen'
 
 
 export default function App() {
-    const [loggedIn, setLoggedIn] = useState(true);
+    const [loggedIn, setLoggedIn] = useState(false);
+    const [userRole, setUserRole] = useState(null);
 
     const handleLogout = () => {
         setLoggedIn(false);
-        
+        setUserRole(null);
     };
 
     return (
         <div>
             <AuthProvider>
-            <BrowserRouter>
+                <BrowserRouter>
                 <Routes>
                     <Route
                         index
-                        element={<Home loggedIn={loggedIn} />}
+                           element={<Home loggedIn={loggedIn} />}
                     />
                     <Route
                         path="/home"
@@ -40,13 +41,14 @@ export default function App() {
                     <Route path="/casussen" element={<Casussen />} />
                     <Route
                         path="/login"
-                        element={<Login setLoggedIn={setLoggedIn} />}
+                        element={<Login setUserRole={setUserRole} />}
                     />
                     <Route path="/register" element={<Register />} />
                     <Route
                         path="/usersettings"
                         element={<Usersettings handleLogout={handleLogout} />}
                     />
+                    
                     <Route path="/bedrijfsregister" element={<BedrijfsRegister />} />
                     <Route path="/beheerderportal" element={<Beheerderportal />} />
                     <Route path="/beheerderportal/onderzoeken" element={<BeheerderportalOnderzoeken />} />

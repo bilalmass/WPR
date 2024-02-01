@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import './componentstyling/usersettings.css';
 import { useAuth } from './AuthContext';
 import Navbar from './Navbar';
@@ -16,11 +16,39 @@ const UserSettings = () => {
     const [blindness, setBlindness] = useState(false);
     const [lowVision, setLowVision] = useState(false);
     const [colorBlindness, setColorBlindness] = useState(false);
-    const { logOut } = useAuth();
     const [selectedRestrictions, setSelectedRestrictions] = useState([]);
+    let token = localStorage.getItem('access_token')
+    const [userData, setUserData] = useState(null);
 
-    
-    
+    useEffect(() => {
+        const fetchUserData = async () => {
+            const response = await fetch(`https://localhost:7211/Gebruiker/gebruikerinfo/${token}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('access_token'),
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('Er is een fout opgetreden bij het ophalen van de gebruikersgegevens');
+            }
+
+            const data = await response.json();
+            setName(data.userName);
+            setEmail(data.email);
+            setPhone(data.telefoonnummer);
+            setPostcode(data.postCode);
+            setVoorkeur(data.voorkeur);
+            setBeperkingen(data.beperkingen);
+            setUserData(data);
+        };
+
+        fetchUserData();
+    }, []);
+
+
+
     const handleEditClick = () => { 
         setIsEditing(true);
     };
@@ -41,7 +69,8 @@ const UserSettings = () => {
     };
 
     const handleLogout = () => {
-        logOut();
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('access_rol')
         navigate('/home');
 
     };
@@ -77,11 +106,6 @@ const UserSettings = () => {
                             <option value="telefoon">Telefonisch contact</option>
                             <option value="e-mail">Mail berichten</option>
                         </select>
-                    </label>
-                    <br />
-                    <label>
-                        Type onderzoeken:
-                        <input type="text" value={onderzoeken} onChange={(e) => setOnderzoeken(e.target.value)} />
                     </label>
                     <br />
                     <label>

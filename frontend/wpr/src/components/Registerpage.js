@@ -1,6 +1,7 @@
 ﻿/* Register.js */
 import React, { useState } from 'react';
 import './componentstyling/registerpage.css';
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
     const [formData, setFormData] = useState({
@@ -15,6 +16,7 @@ const Register = () => {
         geboortedatum: '',
         postCode: ''
     });
+    const navigate = useNavigate();
 
     const [passwordError, setPasswordError] = useState('');
 
@@ -45,14 +47,15 @@ const Register = () => {
     function RegistreerErvaringsdeskundige() {
         fetch('https://localhost:7211/RegistreerErvaringsdeskundige/ErvaringsdeskundigeRegistreer', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData)
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
         })
             .then(response => response.json())
             .then(data => console.log(data))
             .catch(error => console.error('Network error:', error));
+        navigate('/home');
     };
 
 

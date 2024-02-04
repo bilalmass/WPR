@@ -27,16 +27,21 @@ const UserPortal = () => {
                 let data = await response.json();
 
                 data = data.map(user => {
-                    const parts = user.geboortedatum.split('-');
-                    const datum = new Date(parts[2], parts[1] - 1, parts[0]);
-                    const today = new Date();
-                    let age = today.getFullYear() - datum.getFullYear();
-                    const monthDiff = today.getMonth() - datum.getMonth();
-                    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < datum.getDate())) {
-                        age--;
+                    if (user.geboortedatum) {
+                        const parts = user.geboortedatum.split('-');
+                        const datum = new Date(parts[2], parts[1] - 1, parts[0]);
+                        const today = new Date();
+                        let age = today.getFullYear() - datum.getFullYear();
+                        const monthDiff = today.getMonth() - datum.getMonth();
+                        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < datum.getDate())) {
+                            age--;
+                        }
+                        return { ...user, age };
+                    } else {
+                        return user;
                     }
-                    return { ...user, age };
                 });
+
 
                 if (genderFilter !== '' || minAgeFilter !== '' || maxAgeFilter !== '' || discriminatorFilter !== '') {
                     data = data.filter(user => {
@@ -74,6 +79,7 @@ const UserPortal = () => {
                         <li key={user.id}>
                             <strong>{user.firstName} {user.lastName}</strong>
                             <p>Email: {user.email}</p>
+                            <p>Gebruikersnaam: {user.userName}</p>
                             <p>Voornaam: {user.voornaam}</p>
                             <p>Achternaam: {user.achternaam}</p>
                             <p>Telefoonnummer: {user.phoneNumber}</p>
@@ -124,8 +130,9 @@ const UserPortal = () => {
                         Type:
                         <select value={discriminatorFilter} onChange={(e) => setDiscriminatorFilter(e.target.value)}>
                             <option value="">All</option>
-                            <option value="User">User</option>
+                            <option value="Ervaringsdeskundige">Ervaringsdeskundige</option>
                             <option value="Bedrijf">Bedrijf</option>
+                            <option value="Beheerder">Beheerder</option>
                         </select>
                     </label>
                 </div>

@@ -52,6 +52,7 @@ namespace Controller
             _dbContext.Gebruikers.RemoveRange(_dbContext.Gebruikers);
             _dbContext.SaveChanges();
         }
+        
         [HttpGet]
         [Route("gebruikerinfo/{username}")]
         public ActionResult<Gebruiker> GetGebruikerInfo(string username)
@@ -64,6 +65,45 @@ namespace Controller
             }
 
             return Ok(gebruiker);
+        }
+        [HttpDelete]
+        [Route("verwijderen/{username}")]
+        public IActionResult VerwijderAccount(string username)
+        {
+            var account = _dbContext.Gebruikers.FirstOrDefault(u => u.UserName == username);
+
+            if (account == null)
+            {
+                return NotFound();
+            }
+
+            _dbContext.Gebruikers.Remove(account);
+            _dbContext.SaveChanges();
+
+            return NoContent();
+        }
+        public class UpdateEmailModel
+        {
+            public string NieuweEmail { get; set; }
+            public string NieuweTelefoon { get; set; }
+        }
+
+        [HttpPut]
+        [Route("bijwerken/{username}")]
+        public IActionResult BijwerkenGebruiker([FromBody] UpdateEmailModel model, string username)
+        {
+            var gebruiker = _dbContext.Gebruikers.FirstOrDefault(u => u.UserName == username);
+
+            if (gebruiker == null)
+            {
+                return NotFound();
+            }
+
+            gebruiker.Email = model.NieuweEmail;
+            gebruiker.PhoneNumber = model.NieuweTelefoon;
+            _dbContext.SaveChanges();
+
+            return NoContent();
         }
 
     }

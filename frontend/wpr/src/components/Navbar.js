@@ -2,10 +2,17 @@
 import { Link } from 'react-router-dom';
 import './componentstyling/navbar.css';
 import logo from './media/Logo Icon/icon_accessibility.png';
+import { useNavigate } from 'react-router-dom';
 
 const Navbar = ({ refreshKey }) => {
+    const navigate = useNavigate(); 
     const [userDiscriminator, setUserDiscriminator] = useState(localStorage.getItem("access_rol"));
-
+    const handleLogout = () => {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('access_rol')
+        navigate('/home');
+        window.location.reload();
+    };
     useEffect(() => {
         const handleStorageChange = () => {
             setUserDiscriminator(localStorage.getItem("access_rol"));
@@ -36,17 +43,17 @@ const Navbar = ({ refreshKey }) => {
                         </>
                     )}
 
-                    {userDiscriminator === 'bedrijf' && (
+                    {userDiscriminator === 'Bedrijf' && (
                         <>
                             <li><Link to="/bedrijfportaal" className="navbar-link">Bedrijfsportaal▼</Link></li>
-                            <li><Link to="/" className="login-button">Uitloggen▼</Link></li>
+                            <li><button onClick={handleLogout} className="login-button">Uitloggen▼</button></li>
                         </>
                     )}
 
-                    {userDiscriminator === 'beheerder' && (
+                    {userDiscriminator === 'Beheerder' && (
                         <>
                             <li><Link to="/beheerderportal" className="navbar-link">Beheerdersportaal▼</Link></li>
-                            <li><Link to="/logout" className="login-button">Uitloggen▼</Link></li>
+                            <li><button onClick={handleLogout} className="login-button">Uitloggen▼</button></li>
                         </>
                     )}
 

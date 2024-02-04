@@ -18,7 +18,6 @@ const Casussen = () => {
 
                 let onderzoekenData = responseJson.$values;
 
-                // Filter the data
                 onderzoekenData = onderzoekenData.filter(item => item.status === 'Open');
 
                 setOnderzoekenData(onderzoekenData);

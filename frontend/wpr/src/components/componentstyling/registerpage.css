@@ -1,48 +1,26 @@
-﻿.registration-container {
+﻿/* registerpage.css */
+.register-container {
     max-width: 400px;
-    margin: 50px auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-.form-row {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-.input-group{
-    margin-right: auto;
-    margin-bottom: 20px;
-}
-.form-group {
-    margin-bottom: 15px;
+    margin: auto;
 }
 
-label {
+.form-label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 }
 
-input, 
-select,
-button  {
+.form-input {
     width: 100%;
     padding: 8px;
+    margin-bottom: 15px;
     box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 4px;
 }
 
-button {
+.register-button {
     background-color: #21CEA1;
     color: white;
-    padding: 10px;
+    padding: 10px 15px;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
     cursor: pointer;
-}
-
-button:hover {
-    background-color: #1CA883;
 }

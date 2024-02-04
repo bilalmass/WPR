@@ -2,6 +2,8 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using System.Text.Json.Serialization;
+using Controller;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors(options =>
@@ -21,6 +23,10 @@ builder.Configuration.AddEnvironmentVariables();
 
 // Voeg services toe aan de container.
 builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+});
 
 // Leer meer over het configureren van Swagger/OpenAPI op https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -76,10 +82,12 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseMiddleware<JwtMiddleware>();
 app.UseCors("AllowMyOrigin");
 
 app.MapControllers();
+
+
 
 // Voeg de rollen toe
 CreateRoles(app.Services).Wait();

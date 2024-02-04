@@ -2,6 +2,10 @@ using Microsoft.AspNetCore.Mvc;
 using Models; // Ga ervan uit dat Gebruiker is gedefinieerd in de Models-namespace
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 
 namespace Controller
 {
@@ -27,7 +31,6 @@ namespace Controller
         [Route("Login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestData request)
         {
-            // Probeer de gebruiker aan te melden met opgegeven gebruikersnaam en wachtwoord
             var result = await _signInManager.PasswordSignInAsync(request.GebruikersNaam, request.Wachtwoord, false, lockoutOnFailure: false);
 
             // Controleer of de aanmeldpoging succesvol was
@@ -41,7 +44,6 @@ namespace Controller
                 // Return a failure message as a JSON object
                 return BadRequest(new { Success = false, Message = "Aanmelding mislukt" });
             }
-
         }
 
         // Dataklasse om het aanmeldingsverzoek voor te stellen met validatieattributen

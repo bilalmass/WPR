@@ -184,8 +184,3 @@ public class UpdateOnderzoekRequestData
         public string? Beloning { get; set; }
         
     }
-public boolean CheckBedrijfRol
-{
-    if
-    
-}    

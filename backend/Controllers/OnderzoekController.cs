@@ -81,40 +81,58 @@ public class OnderzoekController : ControllerBase
 
     //Aanpassen van Onderzoek (Update)
     [HttpPut("update/{id}")]
+    [Authorize(Roles = "Beheerder")]
     public async Task<IActionResult> UpdateOnderzoek(int id, [FromBody] UpdateOnderzoekRequestData request)
     {
-        var onderzoek = await _context.Onderzoeken.FindAsync(id);
-        if (onderzoek == null)
+        if (!User.IsInRole("Beheerder"))
         {
-            return NotFound("Onderzoek niet gevonden");
+           return Forbid(); // Gebruiker heeft niet de juiste rol, verbied toegang
         }
+        else
+        {
+            var onderzoek = await _context.Onderzoeken.FindAsync(id);
+            if (onderzoek == null)
+            {
+                return NotFound("Onderzoek niet gevonden");
+            }
 
-        if (request.Titel != null && request.Titel != "") onderzoek.Titel = request.Titel;
-        if (request.Beschrijving != null && request.Beschrijving != "") onderzoek.Beschrijving = request.Beschrijving;
-        if (request.Categorie != null && request.Categorie != "") onderzoek.Categorie = request.Categorie;
-        if (request.Beloning != null && request.Beloning != "") onderzoek.Beloning = request.Beloning;
+            if (request.Titel != null && request.Titel != "") onderzoek.Titel = request.Titel;
+            if (request.Beschrijving != null && request.Beschrijving != "") onderzoek.Beschrijving = request.Beschrijving;
+            if (request.Categorie != null && request.Categorie != "") onderzoek.Categorie = request.Categorie;
+            if (request.Beloning != null && request.Beloning != "") onderzoek.Beloning = request.Beloning;
 
-        onderzoek.Start = request.Start;
+            onderzoek.Start = request.Start;
 
-        await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
-        return Ok(new { message = "Onderzoek bijgewerkt" });
+            return Ok(new { message = "Onderzoek bijgewerkt" });
+            }
+        
     }
 
     //Verwijder onderzoek (Delete)
     [HttpDelete("{onderzoekId}")]
+    [Authorize(Roles = "Beheerder")]
     public async Task<IActionResult> DeleteOnderzoek(int onderzoekId)
     {
-        var onderzoek = await _context.Onderzoeken.FindAsync(onderzoekId);
-        if (onderzoek == null)
+        if (!User.IsInRole("Beheerder"))
         {
-            return NotFound();
+           return Forbid(); // Gebruiker heeft niet de juiste rol, verbied toegang
         }
+        else
+        {
+            var onderzoek = await _context.Onderzoeken.FindAsync(onderzoekId);
+            if (onderzoek == null)
+            {
+                return NotFound();
+            }
 
-        _context.Onderzoeken.Remove(onderzoek);
-        await _context.SaveChangesAsync();
+            _context.Onderzoeken.Remove(onderzoek);
+            await _context.SaveChangesAsync();
 
-        return Ok(new { message = "Onderzoek succesvol verwijdert" });
+            return Ok(new { message = "Onderzoek succesvol verwijdert" });
+            }
+        
     }
 
     // Methode om het specifieke onderzoek op te halen (voor CreatedAtAction)

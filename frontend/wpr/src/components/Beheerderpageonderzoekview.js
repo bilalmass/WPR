@@ -9,9 +9,11 @@ const BeheerderOnderzoekview = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('https://localhost:7211/Onderzoek/getall');
+                const response = await fetch('https://localhost:7211/Onderzoek');
                 const data = await response.json();
-                setOnderzoeken(data);
+                console.log(data); // Log the data to verify it's an array
+                // Assuming the array is under the $values key
+                setOnderzoeken(data.$values || []); // Set the array part of the data to the state
             } catch (error) {
                 console.error('Fout bij het ophalen van gegevens:', error);
             }
@@ -19,6 +21,8 @@ const BeheerderOnderzoekview = () => {
 
         fetchData();
     }, []);
+
+
     const updateOnderzoek = async (id) => {
         const response = await fetch(`https://localhost:7211/Onderzoek/update/${id}`, {
             method: 'PUT',

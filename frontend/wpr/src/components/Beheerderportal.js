@@ -4,6 +4,10 @@ import Navbar from './Navbar';
 import './componentstyling/beheerderpage.css';
 
 const Beheerderportal = () => {
+    const rol = localStorage.getItem("access_rol");
+    if (rol !== "Beheerder") {
+        return <div>Deze pagina is niet toegankelijk.</div>;
+    }
     return (
         <>
             <div className="beheerder-portal">
@@ -22,3 +26,4 @@ const Beheerderportal = () => {
 };
 
 export default Beheerderportal;
+

@@ -1,16 +1,25 @@
 import React, { useState } from 'react';
 import { useAuth } from './AuthContext';
-import style from './componentstyling/onderzoekform.css'
-function OnderzoekForm() {
- const { authToken } = useAuth();
+import style from './componentstyling/onderzoekform.css';
+import {Link} from "react-router-dom";
 
- const [onderzoekData, setOnderzoekData] = useState({
-    titel: '',
-    beschrijving: '',
-    start: '',
-    categorie: '',
-    beloning: ''
- });
+function OnderzoekForm() {
+    const { authToken } = useAuth();
+
+    
+    const [onderzoekData, setOnderzoekData] = useState({
+        titel: '',
+        beschrijving: '',
+        start: '',
+        categorie: '',
+        beloning: ''
+    });
+
+    
+    const rol = localStorage.getItem("access_rol");
+    if (rol !== "Beheerder") {
+        return <div>Ga terug naar de <Link to="/home">homepage</Link>.</div>;
+    }
 
  const handleInputChange = (e) => {
     const { name, value } = e.target;

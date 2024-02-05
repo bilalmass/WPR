@@ -16,24 +16,14 @@ public class OnderzoekController : ControllerBase
 
     // Aanmaken onderzoek (Create)
     [HttpPost("create")]
-    [Authorize(Roles = "Bedrijf,Beheerder")]
     public async Task<IActionResult> CreateOnderzoek([FromBody] CreateOnderzoekRequestData request)
     {
-     //    Controleer of de ingelogde gebruiker een "Bedrijf" of "Beheerder" is
-       if (!User.IsInRole("Bedrijf") && !User.IsInRole("Beheerder"))
-       {
-           return Forbid(); // Gebruiker heeft niet de juiste rol, verbied toegang
-       }
-
-        // Haal de ID van de ingelogde gebruiker op
+     // Haal de ID van de ingelogde gebruiker op
        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
         //Zoek het Bedrijf object dat overeenkomt met de ingelogde gebruiker
        var bedrijf = await _context.Bedrijven.FirstOrDefaultAsync(b => b.Id == userId);
-        if (bedrijf == null)
-        {
-            return BadRequest("De ingelogde gebruiker is geen bedrijf.");
-        }
+
 
         var onderzoek = new Onderzoek
         {
@@ -43,7 +33,7 @@ public class OnderzoekController : ControllerBase
             Categorie = request.Categorie,
             Beloning = request.Beloning,
             Status = "Open",
-            Bedrijf = bedrijf // Koppel het Bedrijf aan het Onderzoek
+            Bedrijf = bedrijf 
         };
 
         await _context.Onderzoeken.AddAsync(onderzoek);
@@ -112,15 +102,9 @@ public class OnderzoekController : ControllerBase
 
     //Verwijder onderzoek (Delete)
     [HttpDelete("{onderzoekId}")]
-    [Authorize(Roles = "Beheerder")]
     public async Task<IActionResult> DeleteOnderzoek(int onderzoekId)
     {
-        if (!User.IsInRole("Beheerder"))
-        {
-           return Forbid(); // Gebruiker heeft niet de juiste rol, verbied toegang
-        }
-        else
-        {
+     
             var onderzoek = await _context.Onderzoeken.FindAsync(onderzoekId);
             if (onderzoek == null)
             {
@@ -133,7 +117,7 @@ public class OnderzoekController : ControllerBase
             return Ok(new { message = "Onderzoek succesvol verwijdert" });
             }
         
-    }
+    
 
     // Methode om het specifieke onderzoek op te halen (voor CreatedAtAction)
     [HttpGet("{id}")]
@@ -187,6 +171,7 @@ public class CreateOnderzoekRequestData
         public DateTime Start { get; set; }
         public string Categorie {get; set;}
         public string Beloning {get; set;}
+        
     }
 
 public class UpdateOnderzoekRequestData
@@ -198,3 +183,8 @@ public class UpdateOnderzoekRequestData
         public string? Beloning { get; set; }
         
     }
+public boolean CheckBedrijfRol
+{
+    if
+    
+}    

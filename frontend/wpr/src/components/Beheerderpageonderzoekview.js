@@ -11,56 +11,37 @@ const BeheerderOnderzoekview = () => {
             try {
                 const response = await fetch('https://localhost:7211/Onderzoek');
                 const data = await response.json();
-                console.log(data); // Log the data to verify it's an array
-                // Assuming the array is under the $values key
-                setOnderzoeken(data.$values || []); // Set the array part of the data to the state
+                console.log(data);
+                setOnderzoeken(data.$values || []); 
             } catch (error) {
                 console.error('Fout bij het ophalen van gegevens:', error);
             }
         };
-
+    
         fetchData();
     }, []);
 
+    const verwijderOnderzoek = async (onderzoekId) => {
+        try {
+            const response = await fetch(`https://localhost:7211/Onderzoek/${onderzoekId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
 
-    const updateOnderzoek = async (id) => {
-        const response = await fetch(`https://localhost:7211/Onderzoek/update/${id}`, {
-            method: 'PUT',
-            headers: {
-                'Accept': '*/*',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                status: "Gesloten"
-            })
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        } else {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
             const data = await response.json();
-            console.log(data.message);
+            console.log(data);
+            setOnderzoeken(onderzoeken.filter(onderzoek => onderzoek.id !== onderzoekId));
+        } catch (error) {
+            console.error('Error during DELETE request:', error);
         }
-    }
-    const openOnderzoek = async (id) => {
-        const response = await fetch(`https://localhost:7211/Onderzoek/open/${id}`, {
-            method: 'PUT',
-            headers: {
-                'Accept': '*/*',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                status: "Open"
-            })
-        });
+    };
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        } else {
-            const data = await response.json();
-            console.log(data.message);
-        }
-    }
+
 
     const OnderzoekenList = ({ onderzoeken }) => {
         return (
@@ -78,10 +59,9 @@ const BeheerderOnderzoekview = () => {
                             {onderzoek.categorie && <p>Type: {onderzoek.categorie}</p>}
                             {onderzoek.status && <p>Status: {onderzoek.status}</p>}
                             <button
-                                onClick={() => onderzoek.status === "Gesloten" ? openOnderzoek(onderzoek.onderzoekId) : updateOnderzoek(onderzoek.onderzoekId)}
-                                style={{ backgroundColor: onderzoek.status === "Gesloten" ? "green" : "red" }}
+                                onClick={() => verwijderOnderzoek(onderzoek.onderzoekId)}
                             >
-                                {onderzoek.status === "Gesloten" ? "Open dit onderzoek" : "Sluit dit onderzoek"}
+                                Verwijder
                             </button>
 
                         </li>

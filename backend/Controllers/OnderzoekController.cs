@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
 
+namespace Controller;
 [Route("[controller]")]
 [ApiController]
 public class OnderzoekController : ControllerBase

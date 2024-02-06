@@ -81,6 +81,7 @@ const UserPortal = () => {
                     {users.map((user) => (
                         <li key={user.id}>
                             <strong>{user.firstName} {user.lastName}</strong>
+                            <p>Gebruikers ID: {user.id}</p>
                             <p>Email: {user.email}</p>
                             <p>Gebruikersnaam: {user.userName}</p>
                             <p>Voornaam: {user.voornaam}</p>

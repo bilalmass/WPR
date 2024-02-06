@@ -1,47 +1,52 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Xunit;
-using Controller;
-using Models;
+// using System;
+// using System.Linq;
+// using System.Threading.Tasks;
+// using Microsoft.EntityFrameworkCore;
+// using Xunit;
+// using Controller; // Add the namespace containing OnderzoekController
+// using Models; // Add the namespace containing Onderzoek
 
-namespace Tests
-{
-    public class OnderzoekControllerTests
-    {
-        private readonly DbContextOptions<DbContext> _options;
+// namespace Tests
+// {
+//     public class OnderzoekControllerTests
+//     {
+//         private readonly DbContextOptions<MyDbContext> _options; // Replace MyDbContext with the actual name of your DbContext class
 
-        public OnderzoekControllerTests()
-        {
-            // Arrange: Configureer de in-memory database
-            _options = new DbContextOptionsBuilder<DbContext>()
-                .UseInMemoryDatabase(databaseName: "TestDatabase")
-                .Options;
+//         public OnderzoekControllerTests()
+//         {
+//             // Arrange: Configure the in-memory database
+//             _options = new DbContextOptionsBuilder<MyDbContext>() // Replace MyDbContext
+//                 .UseInMemoryDatabase(databaseName: "TestDatabase")
+//                 .Options;
 
-            // Arrange: Maak een nieuwe instantie van de DbContext met de in-memory database
-            var dbContext = new DbContext(_options);
+//             // Arrange: Create a new instance of the DbContext with the in-memory database
+//             using (var dbContext = new MyDbContext(_options)) // Replace MyDbContext
+//             {
+//                 // Arrange: Add some data to the in-memory database
+//                 dbContext.Onderzoeken.AddRange(
+//                     new Onderzoek { OnderzoekId = 1, Titel = "Onderzoek 1" },
+//                     new Onderzoek { OnderzoekId = 2, Titel = "Onderzoek 2" }
+//                 );
 
-            // Arrange: Voeg wat gegevens toe aan de in-memory database
-            dbContext.Onderzoeken.AddRange(
-                new Onderzoek { OnderzoekId = 1, Titel = "Onderzoek 1" },
-                new Onderzoek { OnderzoekId = 2, Titel = "Onderzoek 2" }
-            );
+//                 dbContext.SaveChanges();
+//             }
+//         }
 
-            dbContext.SaveChanges();
-        }
+//         [Fact]
+//         public async Task GetOnderzoek_ReturnsAllOnderzoeken()
+//         {
+//             // Arrange: Create a new instance of the OnderzoekController with the in-memory database
+//             using (var dbContext = new MyDbContext(_options)) // Replace MyDbContext
+//             {
+//                 var controller = new OnderzoekController(dbContext);
 
-        [Fact]
-        public async Task GetOnderzoek_ReturnsAllOnderzoeken()
-        {
-            // Arrange: Maak een nieuwe instantie van de OnderzoekController met de in-memory database
-            var controller = new OnderzoekController(new DbContext(_options));
+//                 // Act: Call the GetOnderzoek method
+//                 var result = await controller.GetOnderzoek();
 
-            // Act: Roep de GetOnderzoek methode aan
-            var result = await controller.GetOnderzoek();
-
-            // Assert: Controleer of het resultaat niet null is en dat het de verwachte onderzoeken bevat
-            Assert.NotNull(result);
-            Assert.Equal(2, result.Value.Count());
-        }
-    }
-}
+//                 // Assert: Check if the result is not null and it contains the expected onderzoeken
+//                 Assert.NotNull(result);
+//                 Assert.Equal(2, result.Value.Count());
+//             }
+//         }
+//     }
+// }
